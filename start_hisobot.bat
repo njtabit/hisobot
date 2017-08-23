@@ -1,0 +1,2 @@
+nodemon hisobot.js
+PAUSE
