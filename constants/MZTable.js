@@ -232,7 +232,7 @@ class MZTable {
 			//Iterate all zones fetched
 			//NOTE: Ignore cases where openNow == 2 
 			//Skip case where openNow == 2 to ignore "current" MZ1 running
-			if( openNow == this._STAT_OPEN1 ){ continue; }
+			if( openNow == this._STAT_OPEN1 ){ ; }
 			//Case for AHTK, but skip if the counter is 0 or current zone has its time filled
 			else if( openAHTKCounter > 0 
 				&& typeof openAHTK === 'undefined' 
