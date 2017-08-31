@@ -401,7 +401,11 @@ client.on('message', message => {
 		case "annoyed":
 			message.channel.send( "Heh, I'm ignoring you" );
 			break;
-		
+
+		case "arachnobot":
+			message.channel.send("https://m.imgur.com/mzBdnXf");
+			break;
+
 		case undefined:
 			//Cases where it isn't a command message
 			//Ignore as if it wasn't a relevant message
