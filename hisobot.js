@@ -3,7 +3,7 @@
  * Last updated:		31 Aug 2017
  * Developer(s):		CodedLotus
  * Description:			Core details and functions of Hisobot
- * Version #:			1.0.4
+ * Version #:			1.0.5
  * Version Details:
 		0.0.0: Core code came from Nazuna Bot
 		0.0.1: variable string storing bot token changed to constant
@@ -17,6 +17,8 @@
 		1.0.0: Multi-functional bot released for Discord use via GCE (21 Aug 2017)
 		1.0.1: "Hisoguchi" trigger terms added to commandJSO
 		1.0.2: Partial-Schedule Metal Zone look-ahead functionality extended Full-Schedule look-ahead
+		1.0.4: Better Metal Zone return string management and stamina-until functionality added; VH chart added; repo link added
+		1.0.5: Role edits made based on role name changes and server changes
  * fork sourcecode:		https://github.com/danielmilian90/Nazuna
  */
 
@@ -59,7 +61,7 @@ var request = require("request");
 
 //Check if string has substring
 function hasSubstr(str, searchStr){
-	return str.search(searchStr) > 0;
+	return str.includes(searchStr);
 }
 
 //Check what role the user has that elevates their permissions
@@ -209,10 +211,17 @@ function manageRoles(cmd){
 		lowCaseEntry = entry.toLowerCase();
 		
 		//Ignore any attempts to try to get a moderator, admin, companion, bot, or Rydia role.
-		if (!hasSubstr(lowCaseEntry, "com") &&
+		//Ignore: metal minion, wiki editor, content creator, pvp extraordinare
+		if (!hasSubstr(lowCaseEntry, "metal") &&
+			!hasSubstr(lowCaseEntry, "con") &&
+			!hasSubstr(lowCaseEntry, "pvp") &&
+			!hasSubstr(lowCaseEntry, "ryd") &&
+			!hasSubstr(lowCaseEntry, "wiki") &&
+			
+			!hasSubstr(lowCaseEntry, "com") &&
 			!hasSubstr(lowCaseEntry, "mod") &&
 			!hasSubstr(lowCaseEntry, "adm") &&
-			!hasSubstr(lowCaseEntry, "ryd") &&
+			
 			!hasSubstr(lowCaseEntry, "bot") &&
 			!hasSubstr(lowCaseEntry, "dyno") ){
 			
@@ -303,7 +312,7 @@ function metalZoneString(zoneType, zoneNum, zoneTime, showStamina){
 }
 
 function metalZone(cmd){
-	var showStamina = (cmd.details.includes("-s") || cmd.details.includes("s"));
+	var showStamina = (hasSubstr(cmd.details, "-s") || hasSubstr(cmd.details, "s"));
 	if (showStamina) {cmd.details = cmd.details.replace(/-?s/gi, "").trim();}
 	var futureMZSchedule = "";
 	var schedule = "Time remaining until: (D:HH:MM)\n```";
