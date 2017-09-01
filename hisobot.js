@@ -1,9 +1,9 @@
 /*
  * Created:				26 June 2017
- * Last updated:		22 Aug 2017
+ * Last updated:		31 Aug 2017
  * Developer(s):		CodedLotus
  * Description:			Core details and functions of Hisobot
- * Version #:			1.0.2
+ * Version #:			1.0.4
  * Version Details:
 		0.0.0: Core code came from Nazuna Bot
 		0.0.1: variable string storing bot token changed to constant
@@ -290,19 +290,35 @@ function wikitest(message){
 	});
 }
 
+function metalZoneString(zoneType, zoneNum, zoneTime, showStamina){
+	var outStr = (zoneType == "AHTK" ? "\t" : "") + zoneType + (zoneType == "AHTK" ? "" : zoneNum) + ": " + zoneTime;
+	if (showStamina) {
+		var times = zoneTime.split(":"), stamina = 0;
+		times.forEach(function myFunction(item, index, arr) { arr[index] = parseInt(item); }); //conversion function
+		if (times.length > 2) { times[0] = 24*times[0] + times[1]; times[1] = times[2];  }
+		stamina += (times[0]*30 + Math.floor(times[1]/2));
+		outStr += " (" + (stamina < 100 ? "0" : "" ) + (stamina < 10 ? "0" : "" ) + stamina + ")";
+	}
+	return outStr;
+}
+
 function metalZone(cmd){
+	var showStamina = (cmd.details.includes("-s") || cmd.details.includes("s"));
+	if (showStamina) {cmd.details = cmd.details.replace(/-?s/gi, "").trim();}
+	var futureMZSchedule = "";
+	var schedule = "Time remaining until: (D:HH:MM)\n```";
 	if (cmd.details == "" || cmd.details == "all") {
-		var futureMZSchedule = MZSchedule.getNextZoneSchedule();
-		var schedule = "Time remaining until: (D:HH:MM)\n";
+		futureMZSchedule = MZSchedule.getNextZoneSchedule();
 		for (var zone = 0; zone < MZSchedule._MAX_ZONE; ++zone){
-			schedule += "MZ" + (zone+1) + ": " + futureMZSchedule.openZoneSchedule[zone];
-			schedule += "  AHTK" + ": " + futureMZSchedule.openAHTKSchedule[zone] + "\n";
+			schedule += metalZoneString("MZ",(zone+1),futureMZSchedule.openZoneSchedule[zone],showStamina);
+			schedule += metalZoneString("AHTK",(zone+1), futureMZSchedule.openAHTKSchedule[zone],showStamina) + "\n";
 		}
+		schedule += "```";
 		cmd.message.channel.send(schedule);
 	}
 	else{
-		var futureMZSchedule = "";
-		switch (cmd.details){
+		futureMZSchedule = "";
+		switch ( parseInt(cmd.details) ){
 			case 1: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(1); break;
 			case 2: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(2); break;
 			case 3: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(3); break;
@@ -312,9 +328,9 @@ function metalZone(cmd){
 			case 7: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(7); break;
 			default: cmd.message.channel.send( "I don't know that zone. You doing okay?" );
 		}
-		var schedule = "Time remaining until: (D:HH:MM)\n";
-		schedule += "MZ" + cmd.details + ": " + futureMZSchedule.openZoneSchedule;
-		schedule += "  AHTK" + ": " + futureMZSchedule.openAHTKSchedule + "\n";
+		schedule += metalZoneString("MZ",   cmd.details, futureMZSchedule.openZoneSchedule, showStamina);
+		schedule += metalZoneString("AHTK", cmd.details, futureMZSchedule.openAHTKSchedule, showStamina) + "\n```";
+		cmd.message.channel.send(schedule);
 	}
 }
 
@@ -405,6 +421,15 @@ client.on('message', message => {
 		case "arachnobot":
 			message.channel.send("https://m.imgur.com/mzBdnXf");
 			break;
+		
+		case "vh":
+		case "vengeful":
+			message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
+			
+		case "repo":
+			message.author.send("https://github.com/bokochaos/hisobot");
+			break;
+		
 
 		case undefined:
 			//Cases where it isn't a command message

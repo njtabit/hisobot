@@ -1,15 +1,16 @@
 /**
  * Created:				11 Aug 2017
- * Last updated:		22 Aug 2017
+ * Last updated:		23 Aug 2017
  * Developer(s):		CodedLotus
  * Description:			Returns details of the TB1 Metal Zone. Initial Function code came from crape.org/tools/terra-battle/mz.html
- * Version #:			1.2.0
+ * Version #:			1.2.1
  * Version Details:
 		0.0.0: File created from cloning token.js file
 		1.0.0: Basic on-the-hour MZ schedule available
 		1.1.0: Full Schedule search available from class
 		1.1.1: Added auto-correcting DateString function to make the array material more readable and usable
 		1.2.0: Added single-zone schedule access function for data retrieval
+		1.2.1: Corrected semi-scheduled infinite loop.
  * Functional sourcecode:	https://crape.org/tools/terra-battle/mz.html
  */
 

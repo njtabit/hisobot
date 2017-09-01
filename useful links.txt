@@ -20,3 +20,5 @@ http://terrabattle.wikia.com/api.php
 http://terrabattle.wikia.com/wiki/Module:Skill
 http://terrabattle.wikia.com/wiki/Module:Skills/Data
 https://github.com/hydrabolt/discord.js/issues/239
+
+https://superuser.com/questions/1110574/keeping-a-java-app-running-when-ssh-is-closed-on-google-cloud
