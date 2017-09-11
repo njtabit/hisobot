@@ -22,7 +22,6 @@
  * fork sourcecode:		https://github.com/danielmilian90/Nazuna
  */
 
-//console.log("Hello world!");
 
 //import the function getToken() as a part of botCodes to allow access to bot token
 const token = require('./constants/token').token;
@@ -39,7 +38,6 @@ var roleNames = require('./constants/role_maps').roleNames;
 /* Metal Zone Tracker */
 var MZTable = require("./constants/MZTable");
 var MZSchedule = new MZTable();
-
 
 const Discord = require('discord.js');
 //const commando = require('discord.js-commando');
@@ -67,7 +65,6 @@ function hasSubstr(str, searchStr){
 //Check what role the user has that elevates their permissions
 function checkHoistRole(cmd){
 	return cmd.message.member.hoistRole;
-	
 }
 
 /*bot.registry.registerGroup('random','Random');
@@ -81,7 +78,7 @@ function commandIs(str, msg){
 //Return JSO that contains the command, and relevant details following
 function commandJSO(msg){
 	//check if message actually is a command. If not, return a "no_task" JSO.
-	//In the case of not having anything but a trigger, return an "annoyed" JSO
+       //In the case of not having anything but a trigger, return an "annoyed" JSO
 	var msgContent = msg.content, msgContentLower = msg.content.toLowerCase();
 	
 	/*Checking for cases
@@ -351,7 +348,6 @@ client.on('ready', () => {
 	//message.channel.send('I'm back!');
 });
 
-
 // Search on wiki
 
 client.on('message', message => {
@@ -363,6 +359,20 @@ client.on('message', message => {
 	 *   message: [message object issuing command]
 	 * }
 	 */
+    var zerorpc = require("zerorpc");
+
+    var client = new zerorpc.Client();
+    client.connect("tcp://127.0.0.1:4242");
+    if (message.author.username != "hisobot"){
+    //calls the method on the python object
+        client.invoke("hello", "World", message.author.username, function(error, reply, streaming) {
+	    if(error){
+		console.log("ERROR: ", error);
+	    }
+	    message.channel.send(reply);
+	});
+    }
+    
 	var command = commandJSO(message);
 	
 	
@@ -425,26 +435,27 @@ client.on('message', message => {
 		
 		case "annoyed":
 			message.channel.send( "Heh, I'm ignoring you" );
-			break;
+	                break;
 
 		case "arachnobot":
-			message.channel.send("https://m.imgur.com/mzBdnXf");
+			message.channel.send("https://i.imgur.com/mzBdnXf.png");
 			break;
-		
+	    
 		case "vh":
 		case "vengeful":
 			message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
+			break;	    
 			
 		case "repo":
 			message.author.send("https://github.com/bokochaos/hisobot");
 			break;
 		
-
 		case undefined:
 			//Cases where it isn't a command message
 			//Ignore as if it wasn't a relevant message
 			break;
-		default:
+
+	        default:
 			//Cases where it isn't a recognized command
 			message.channel.send("What?\nRun that by me again.");
 	}
