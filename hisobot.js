@@ -49,8 +49,11 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
-
-
+var zerorpc = require("zerorpc");
+var spawn = require("child_process").spawn;
+var py = spawn('python3', ['server.py'])
+var zerorpcClient = new zerorpc.Client();
+zerorpcClient.connect("tcp://127.0.0.1:4242");
 
 /*
  * Helper Functions that I will use frequently
@@ -359,13 +362,9 @@ client.on('message', message => {
 	 *   message: [message object issuing command]
 	 * }
 	 */
-    var zerorpc = require("zerorpc");
-
-    var client = new zerorpc.Client();
-    client.connect("tcp://127.0.0.1:4242");
     if (message.author.username != "hisobot"){
     //calls the method on the python object
-        client.invoke("hello", "World", message.author.username, function(error, reply, streaming) {
+        zerorpcClient.invoke("hello", message.content, message.author.username, message.createdTimestamp, function(error, reply, streaming) {
 	    if(error){
 		console.log("ERROR: ", error);
 	    }
