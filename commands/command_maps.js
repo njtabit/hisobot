@@ -1,4 +1,5 @@
 /*
+ * Created:				  05 Sep 2017
  * Last updated:		05 Sep 2017
  * Developer(s):		CodedLotus
  * Description:			Return a Discord.JS Collection object with pairs for command names
