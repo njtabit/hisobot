@@ -1,6 +1,6 @@
 /**
  * Created:				  06 Sep 2017
- * Last updated:		14 Sep 2017
+ * Last updated:		15 Sep 2017
  * Developer(s):		CodedLotus
  * Description:			Returns the current TB1 Daily Quest. Initial Schedule came from https://terrabattleforum.com/threads/medieval-battle-4-4-0-update.11929/
  * Version #:			  1.0.1
@@ -89,6 +89,16 @@ class DQTable {
 	 */
 	timeRemaining(timeObject = false) {
 		var dTod = new Date(), dTom = new Date(dTod.toUTCString());
+		dTom.setDate(dTom.getDate() + 1); dTom.setUTCHours(0); dTom.setUTCMinutes(0); dTom.setUTCSeconds(0); dTom.setUTCMilliseconds(0);
+		var baseDeltaH = Math.floor( (dTom - dTod) / (this._HOUR_IN_MS) );
+		var baseDeltaM = Math.round( (dTom - dTod - baseDeltaH * this._HOUR_IN_MS) / (this._MIN_IN_MS) );
+		return ( !timeObject ? 
+			baseDeltaH + ":" + (baseDeltaM < 10 ? "0" : "" ) + baseDeltaM :
+			{quest: this.getDailyQuest(dTod), hours: baseDeltaH, minutes: baseDeltaM } ) ;
+	}
+  
+  timeRemaining(dTod, timeObject = false) {
+		var dTom = new Date(new Date().toUTCString());
 		dTom.setDate(dTom.getDate() + 1); dTom.setUTCHours(0); dTom.setUTCMinutes(0); dTom.setUTCSeconds(0); dTom.setUTCMilliseconds(0);
 		var baseDeltaH = Math.floor( (dTom - dTod) / (this._HOUR_IN_MS) );
 		var baseDeltaM = Math.round( (dTom - dTod - baseDeltaH * this._HOUR_IN_MS) / (this._MIN_IN_MS) );

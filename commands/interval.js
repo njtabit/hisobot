@@ -1,13 +1,12 @@
 /*
  * Created:				  13 Sept 2017
- * Last updated:		14 Sept 2017
+ * Last updated:		15 Sept 2017
  * Developer(s):		CodedLotus
  * Description:			Returns the inverval function for the bot
  * Version #:			  1.1.0
  * Version Details:
 		1.0.0: document created with frequently experimented functions
 		1.1.0: Changed function parameters, function trigger conditions, and moved down essential const variables to base level functions
-		1.0.2: 
  */
 
 //var MZSchedule = require("./MZTable");
@@ -23,16 +22,16 @@ function TBmidHourAlerts(time, DQSchedule, MZSchedule){
   const openZones = MZSchedule.getOpenZones(time);
   const mz6       = MZSchedule.getSpecificZoneSchedule(6, false),
         mz7       = MZSchedule.getSpecificZoneSchedule(7, false);
-  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule),
-        tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule),
-        tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule),
-        tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule),
-        tLeftInDQ = DQSchedule.timeRemaining(true);
+  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
+        tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule, time),
+        tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule, time),
+        tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule, time),
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);
   
   var output = "";
   
   //Daily Quest Alert
-  output += (tLeftInDQ.hours == ZERO ? openLeft.format( "Daily Quest", tLeftInDQ.quest, MIN_LEFT, "min" ) + "\n" : "" );
+  output += (tLeftInDQ.hours == ZERO ? openLeft.format( "Daily Quest ", tLeftInDQ.quest, MIN_LEFT, "min" ) + "\n" : "" );
   
   //MZ 6/7 (AHTK) Closing Alert
   output += (openZones[6] > MZSchedule._STAT_CLOSE 
@@ -60,17 +59,17 @@ function TBonHourAlerts(time, DQSchedule, MZSchedule){
   const openZones = MZSchedule.getOpenZones(time);
   const mz6       = MZSchedule.getSpecificZoneSchedule(6, false),
         mz7       = MZSchedule.getSpecificZoneSchedule(7, false);
-  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule),
-        tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule),
-        tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule),
-        tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule),
-        tLeftInDQ = DQSchedule.timeRemaining(true);
+  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
+        tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule, time),
+        tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule, time),
+        tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule, time),
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);
   
   var output = "";
   
   //Daily Quest Alert
   output += ( (tLeftInDQ.hours%DQ_SPACER == ZERO || tLeftInDQ.hours == MZ_HOUR_THRESHOLDS[ZERO]) 
-    ? openLeft.format( "Daily Quest", tLeftInDQ.quest, tLeftInDQ.hours, "hour(s)" ) + "\n" : "" );
+    ? openLeft.format( "Daily Quest ", tLeftInDQ.quest, tLeftInDQ.hours, "hour(s)" ) + "\n" : "" );
   
   //MZ 6/7 (AHTK) Live Alert
   output += (openZones[6] > MZSchedule._STAT_CLOSE 

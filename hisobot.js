@@ -20,7 +20,7 @@
 		1.0.4: Better Metal Zone return string management and stamina-until functionality added; VH chart added; repo link added
 		1.0.5: Role edits made based on role name changes and server changes
     1.1.0: Added interval-based alerts for Hisobot to send out.
-    1.1.0: Changed some requires in accord with their module export changes.
+    1.1.1: Changed some requires in accord with their module export changes.
  * fork sourcecode:		https://github.com/danielmilian90/Nazuna
  */
 
@@ -108,6 +108,12 @@ function commandJSO(msg){
 	 * D: Commands that start with the bot's trigger character
 	 */
 	
+  if( msgContentLower == "praiseyamcha" )
+  { //Because why not
+    msg.channel.send("Good, I don't need the Dragon Balls pulled out of storage.");
+    return new Object(); //Escape safely
+  }
+  
   if( msgContentLower.startsWith("thank you") || msgContentLower.startsWith("thanks")
     && (hasSubstr(msgContentLower, "hisobot") || hasSubstr(msgContentLower, "hisoguchi") ) )
   {
@@ -165,6 +171,7 @@ function commandJSO(msg){
 //Establishes the alert system for HisoBot
 //14 Sept 2017: I don't know how to nest Discord Client functions within one another to make it work yet
 function alerts(client, MZSchedule, DQSchedule){
+  IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
   client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
 }
 
@@ -499,7 +506,7 @@ client.on('message', message => {
 		
 		case "mz":
 		case "metal":
-			response = metalZone(command);
+			metalZone(command);
 			//message.channel.send("Coming soon!");
 			break;
 		
@@ -515,12 +522,16 @@ client.on('message', message => {
 	                break;
 
 		case "arachnobot":
-			message.channel.send("https://i.imgur.com/mzBdnXf.png");
+			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
+      sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
+      sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
 			break;
 	    
 		case "vh":
 		case "vengeful":
-			message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
+      sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
+      sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
+			//message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
 			break;
 			
 		case "repo":

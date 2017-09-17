@@ -154,16 +154,16 @@ class MZTable {
   /**
 	 * Function that converts Date data into a usable JSO for Discord alert purposes
 	 */
-	timeRemaining(date) {
-		var dateNow = new Date();
+	timeRemaining(MZdate, dateNow = new Date()) {
+		//var dateNow = new Date();
 		var baseDeltaD = Math.floor(
-			(date - dateNow) / (this._DAY_IN_MS)
+			(MZdate - dateNow) / (this._DAY_IN_MS)
 		);
 		var baseDeltaH = Math.floor(
-			(date - dateNow - baseDeltaD * this._DAY_IN_MS) / (this._HOUR_IN_MS)
+			(MZdate - dateNow - baseDeltaD * this._DAY_IN_MS) / (this._HOUR_IN_MS)
 		);
 		var baseDeltaM = Math.floor(
-			(date - dateNow - baseDeltaD * this._DAY_IN_MS - baseDeltaH * this._HOUR_IN_MS) / (this._MIN_IN_MS)
+			(MZdate - dateNow - baseDeltaD * this._DAY_IN_MS - baseDeltaH * this._HOUR_IN_MS) / (this._MIN_IN_MS)
 		);
     return { days: baseDeltaD, hours: baseDeltaH, minutes: baseDeltaM };
 	}
