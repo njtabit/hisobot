@@ -40,8 +40,11 @@ function TBmidHourAlerts(time, DQSchedule, MZSchedule){
     ? openLeft.format( "MZ6", (openZones[5]==MZSchedule._STAT_KING?" AHTK":""), MIN_LEFT, "min" ) + "\n" : "" );
   
   //MZ 6/7 Opening Alert
-  output += (tUntilM7A.hours == ZERO ? openNowIn.format( "MZ7 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
-  output += (tUntilM6A.hours == ZERO ? openNowIn.format( "MZ6 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
+  //It is vital to check if the days == 0 since it would leave players thinking it will open soon.
+  output += ( (tUntilM7A.hours == ZERO && tUntilM7A.days == ZERO ) 
+    ? openNowIn.format( "MZ7 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
+  output += ( (tUntilM6A.hours == ZERO && tUntilM6A.days == ZERO ) 
+    ? openNowIn.format( "MZ6 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
   output += (tUntilM7.hours  == ZERO ? openNowIn.format( "MZ7",      " in " + MIN_LEFT + " min" ) + "\n" : "" );
   output += (tUntilM6.hours  == ZERO ? openNowIn.format( "MZ6",      " in " + MIN_LEFT + " min" ) + "\n" : "" );
   
@@ -106,16 +109,18 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
     //(30 and 10) minutes left check
     //Order: Daily Quest -> MZ Closing -> MZ Opening
     if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 ){
+      console.log("time is: " + time.toUTCString());
       alertString = TBmidHourAlerts(time, DQSchedule, MZSchedule);
     }//End of Immediacy Alerts
     
     //On-the-hour Alerts
     else if(time.getMinutes() == ZERO){
+      console.log("time is: " + time.toUTCString());
       alertString = TBonHourAlerts(time, DQSchedule, MZSchedule);
     }//End of On-the-hour Alerts
     
     if (alertString.length > 0){
-      const tb1General = client.channels.find("name", "tb-general");
+      const tb1General = client.channels.find("name", "tb-bot-alerts");
       tb1General.send(alertString);
     }
   }
@@ -123,7 +128,7 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
 
 function intervalAlert(client, MZSchedule, DQSchedule){
 	var time = new Date(); time.setSeconds(0); time.setMilliseconds(0);
-	console.log("time is: " + time.toUTCString());
+	//console.log("time is: " + time.toUTCString());
 	/*print(time.toString());
 	if(time.getMinutes() == 0){
 		print("New Hour!");

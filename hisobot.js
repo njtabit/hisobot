@@ -56,7 +56,7 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
-var python = require("./python.js");
+//var python = require("./python.js");
 var mongo = require("./database.js");
 
 /*
@@ -108,18 +108,39 @@ function commandJSO(msg){
 	 * D: Commands that start with the bot's trigger character
 	 */
 	
-  if( msgContentLower == "praiseyamcha" )
+  if( msgContentLower == "praiseyamcha" || msgContentLower == "praise yamcha" )
   { //Because why not
     msg.channel.send("Good, I don't need the Dragon Balls pulled out of storage.");
     return new Object(); //Escape safely
   }
   
-  if( msgContentLower.startsWith("thank you") || msgContentLower.startsWith("thanks")
-    && (hasSubstr(msgContentLower, "hisobot") || hasSubstr(msgContentLower, "hisoguchi") ) )
+  if( msgContentLower.startsWith("thank you") || msgContentLower.startsWith("thanks") )
   {
-    const goodjob = client.emojis.find("name", "goodjob"), love = client.emojis.find("name", "love");
-    msg.react(goodjob); msg.react(love);
+    msgContentLower = ( msgContentLower.startsWith("thank you") 
+      ? msgContentLower.slice("thank you".length).trim()
+      : msgContentLower.slice("thanks".length).trim() );
+    
+    if( msgContentLower == "hisobot" || msgContentLower == "hisoguchi"){
+      const goodjob = client.emojis.find("name", "goodjob"), love = client.emojis.find("name", "love");
+      msg.react(goodjob); msg.react(love);
+    }
     return new Object(); //Escape safely
+    
+  }
+  
+  if( msgContentLower.startsWith("sorry") || msgContentLower.startsWith("im sorry") || msgContentLower.startsWith("i'm sorry") )
+  {
+    msgContentLower = ( msgContentLower.startsWith("sorry") 
+      ? msgContentLower.slice("sorry".length).trim()
+      : ( msgContentLower.startsWith("im sorry") 
+          ? msgContentLower.slice("im sorry".length).trim()
+          : msgContentLower.slice("i'm sorry".length).trim() ) );
+    
+    if( msgContentLower == "hisobot" || msgContentLower == "hisoguchi"){
+      const love = client.emojis.find("name", "love");
+      msg.react(love);
+    }
+    return new Object(); //Escape safely 
   }
   
 	//Manage case A with an object with task "annoyed" to trigger bot's annoyed message
@@ -134,27 +155,27 @@ function commandJSO(msg){
 	//Manage case C or D with a JSObject to trigger and fulfil the requirements of said task
 	//Remove the command notification trigger, and clean unnecessary whiteSpace
 	//sets msgContent to be the substring without header "!"
-	else if ( msgContent.startsWith('!') ) { msgContent = msgContent.substr(1).trim(); }
+	else if ( msgContent.startsWith('!') ) { msgContent = msgContent.slice(1).trim(); }
 	
 	//sets msgContent to be the substring without header "Hisobot"
-	else if ( msgContentLower.startsWith('hisobot,') ) { msgContent = msgContent.substr("Hisobot,".length).trim(); }
+	else if ( msgContentLower.startsWith('hisobot,') ) { msgContent = msgContent.slice("Hisobot,".length).trim(); }
 	
 	//sets msgContent to be the substring without header "[bot nickname]" ATM managed as Hisoguchi
 	//TODO: Manage case D part b (bot_nickname resolution) for all cases
-	else { msgContent = msgContent.substr("Hisoguchi,".length).trim(); }
+	else { msgContent = msgContent.slice("Hisoguchi,".length).trim(); }
 	
 	delete msgContentLower;
 	
 	console.log("current command content: " + msgContent);
 	
-	//Get the index of the first space. -1 means that it is a no-detail command
-	//26 July 2017: Issue where -1 -> 0, causing a (0,0)-exclusive substring fails is resolved
-	var indexOfSpace = msgContent.indexOf(' ');
-	indexOfSpace = ( ( indexOfSpace == -1 ) ? msgContent.length : indexOfSpace );
-	
 	//set pmFlag on command if (-)pm command flag has been set in command details
 	var pmFlag = (hasSubstr(msgContent, "-pm") || hasSubstr(msgContent, "pm"));
 	if (pmFlag) {msgContent = msgContent.replace(/-?pm/gi, "").trim();}
+  
+  //Get the index of the first space. -1 means that it is a no-detail command
+	//26 July 2017: Issue where -1 -> 0, causing a (0,0)-exclusive substring fails is resolved
+	var indexOfSpace = msgContent.indexOf(' ');
+	indexOfSpace = ( ( indexOfSpace == -1 ) ? msgContent.length : indexOfSpace );
 	
 	//create command to return JSObject to resolve in response to command messages
 	var command = new Object();
@@ -448,10 +469,10 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-    if (message.author.username != "hisobot"){
+    /*if (message.author.username != "hisobot"){
 	//calls the method on the python object
 	python.hello(message);
-    }
+    }*/
     
 	var command = commandJSO(message);
 	
@@ -462,7 +483,7 @@ client.on('message', message => {
 			
 			//20 July 2017: Not sure if this message is reached.
 			//01 Aug 2017: Message is reached if the user does not have authorization. Thanks @Paddington for being the first person to test that.
-			console.log("Shutdown test message");
+			//console.log("Shutdown test message");
 			
 			//20 July 2017: Is break ever reached if the process kills itself?
 			break;
