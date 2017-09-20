@@ -34,7 +34,7 @@ const customErrors = require('./constants/errors');
 //const SKILLS = require('./constants/skills_data').Skills;
 
 //r/TB Discord role names and alterations
-var roleNames = require('./constants/role_maps');
+var roleNames = require('./commands/role_maps');
 //TODO: make this into a DB system that allows for better name association management
 
 /* Metal Zone Tracker */
@@ -98,8 +98,10 @@ function commandIs(str, msg){
 //Return JSO that contains the command, and relevant details following
 function commandJSO(msg){
 	//check if message actually is a command. If not, return a "no_task" JSO.
-       //In the case of not having anything but a trigger, return an "annoyed" JSO
+  //In the case of not having anything but a trigger, return an "annoyed" JSO
 	var msgContent = msg.content, msgContentLower = msg.content.toLowerCase();
+  
+  const msgPrefixes = ["!","hisobot, ","hisoguchi,"];
 	
 	/*Checking for cases
 	 * A: Command messages with no further details or tasks
@@ -145,24 +147,26 @@ function commandJSO(msg){
   
 	//Manage case A with an object with task "annoyed" to trigger bot's annoyed message
 	//TODO: Manage case A part b (bot_nickname resolution) for all cases
-	if( msgContentLower === "!" || msgContentLower === "hisobot," || msgContentLower === "hisoguchi," ) { return {task: "annoyed"}; }
-	//Manage case B with an object with no task to trigger bot's ignore response
+	if( msgPrefixes.some(x => x === msgContentLower) ) { return {task: "annoyed"}; }
+  //if( msgContentLower === "!" || msgContentLower === "hisobot," || msgContentLower === "hisoguchi," ) { return {task: "annoyed"}; }
+	//Manage case B with an object with no task to trigger bot's ignore response (or prevent a botception)
 	//TODO: Manage case B part b (bot_nickname resolution) for all cases
 	//Earlier existing bug: || over && prevented all commands from being read...
-	else if ( !msgContentLower.startsWith('!') && !msgContentLower.startsWith("hisobot,") && !msgContentLower.startsWith("hisoguchi,") ) { return new Object(); }
+  else if ( message.author.bot || !( msgPrefixes.some(x => msgContentLower.startsWith(x)) ) ) { return new Object(); }
+  //else if ( message.author.bot || (!msgContentLower.startsWith('!') && !msgContentLower.startsWith("hisobot,") && !msgContentLower.startsWith("hisoguchi,") ) ) { return new Object(); }
 	
 	
 	//Manage case C or D with a JSObject to trigger and fulfil the requirements of said task
 	//Remove the command notification trigger, and clean unnecessary whiteSpace
 	//sets msgContent to be the substring without header "!"
-	else if ( msgContent.startsWith('!') ) { msgContent = msgContent.slice(1).trim(); }
+	else if ( msgContent.startsWith(msgPrefixes[0]) ) { msgContent = msgContent.slice(1).trim(); }
 	
 	//sets msgContent to be the substring without header "Hisobot"
-	else if ( msgContentLower.startsWith('hisobot,') ) { msgContent = msgContent.slice("Hisobot,".length).trim(); }
+	else if ( msgContentLower.startsWith(msgPrefixes[1]) ) { msgContent = msgContent.slice(msgPrefixes[1].length).trim(); }
 	
 	//sets msgContent to be the substring without header "[bot nickname]" ATM managed as Hisoguchi
 	//TODO: Manage case D part b (bot_nickname resolution) for all cases
-	else { msgContent = msgContent.slice("Hisoguchi,".length).trim(); }
+	else { msgContent = msgContent.slice(msgPrefixes[2].length).trim(); }
 	
 	delete msgContentLower;
 	
@@ -267,7 +271,7 @@ function manageFeeding(details) {
 //Add server roles to user based on command details
 function manageRoles(cmd){
 	//console.log(cmd.message.channel instanceof Discord.DMChannel);
-	if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
+	//if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
 	const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
   var roles = cmd.details.split(","),  guildMember = cmd.message.member;
 	const guild  = client.guilds.find("name", "Terra Battle");
@@ -290,24 +294,13 @@ function manageRoles(cmd){
         
       }
      );*/ //TODO: Manage Void Role rejection more elegantly
-		if (!hasSubstr(lowCaseEntry, "metal") &&
-			!hasSubstr(lowCaseEntry, "con") &&
-			!hasSubstr(lowCaseEntry, "pvp") &&
-			!hasSubstr(lowCaseEntry, "ryd") &&
-			!hasSubstr(lowCaseEntry, "wiki") &&
-			
-			!hasSubstr(lowCaseEntry, "com") &&
-			!hasSubstr(lowCaseEntry, "mod") &&
-			!hasSubstr(lowCaseEntry, "adm") &&
-			
-			!hasSubstr(lowCaseEntry, "bot") &&
-			!hasSubstr(lowCaseEntry, "dyno") ){
+		if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
 			
 			//run requested role name through the roleName DB
 			var roleCheck = openRoles.get(lowCaseEntry); //TODO: Make a DB that allows for server-specific role name checks
 			var role;
 			
-			try{ var role = guildRoles.find("name", roleCheck); }
+			try{ role = guildRoles.find("name", roleCheck); }
 			catch (err) { 
 				//Role didn't exist
 				console.log(err.message);
@@ -324,7 +317,7 @@ function manageRoles(cmd){
 		//guildMember = cmd.message.member;
 	});
 	//return feedback responses
-	return feedback;
+	( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
 }
 
 
@@ -564,7 +557,7 @@ client.on('message', message => {
 			//Ignore as if it wasn't a relevant message
 			break;
 
-	        default:
+    default:
 			//Cases where it isn't a recognized command
 			//message.channel.send("What?\nRun that by me again.");
 			//response = "What?\nRun that by me again.";
