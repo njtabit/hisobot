@@ -101,7 +101,11 @@ function commandJSO(msg){
   //In the case of not having anything but a trigger, return an "annoyed" JSO
 	var msgContent = msg.content, msgContentLower = msg.content.toLowerCase();
   
-  const msgPrefixes = ["!","hisobot, ","hisoguchi,"];
+  const msgPrefixes  = [ "!", "hisobot,", "hisoguchi,"],
+        thankYou     = [ "thank you", "thanks"],
+        sorry        = [ "sorry", "im sorry", "i'm sorry"],
+        praiseYamcha = [ "praiseyamcha", "praise yamcha"],
+        hisoNames    = ["hisobot", "hisoguchi"];
 	
 	/*Checking for cases
 	 * A: Command messages with no further details or tasks
@@ -110,19 +114,19 @@ function commandJSO(msg){
 	 * D: Commands that start with the bot's trigger character
 	 */
 	
-  if( msgContentLower == "praiseyamcha" || msgContentLower == "praise yamcha" )
+  if( praiseYamcha.some( x => msgContentLower == x ) )
   { //Because why not
     msg.channel.send("Good, I don't need the Dragon Balls pulled out of storage.");
     return new Object(); //Escape safely
   }
   
-  if( msgContentLower.startsWith("thank you") || msgContentLower.startsWith("thanks") )
+  if( thankYou.some( x => msgContentLower.startsWith(x)) )
   {
     msgContentLower = ( msgContentLower.startsWith("thank you") 
       ? msgContentLower.slice("thank you".length).trim()
       : msgContentLower.slice("thanks".length).trim() );
     
-    if( msgContentLower == "hisobot" || msgContentLower == "hisoguchi"){
+    if( hisoNames.some( x => msgContentLower == x ) ){
       const goodjob = client.emojis.find("name", "goodjob"), love = client.emojis.find("name", "love");
       msg.react(goodjob); msg.react(love);
     }
@@ -130,7 +134,7 @@ function commandJSO(msg){
     
   }
   
-  if( msgContentLower.startsWith("sorry") || msgContentLower.startsWith("im sorry") || msgContentLower.startsWith("i'm sorry") )
+  if( sorry.some( x => msgContentLower.startsWith(x) ) )
   {
     msgContentLower = ( msgContentLower.startsWith("sorry") 
       ? msgContentLower.slice("sorry".length).trim()
@@ -138,7 +142,7 @@ function commandJSO(msg){
           ? msgContentLower.slice("im sorry".length).trim()
           : msgContentLower.slice("i'm sorry".length).trim() ) );
     
-    if( msgContentLower == "hisobot" || msgContentLower == "hisoguchi"){
+    if( hisoNames.some( x => msgContentLower == x ) ){
       const love = client.emojis.find("name", "love");
       msg.react(love);
     }
@@ -147,12 +151,12 @@ function commandJSO(msg){
   
 	//Manage case A with an object with task "annoyed" to trigger bot's annoyed message
 	//TODO: Manage case A part b (bot_nickname resolution) for all cases
-	if( msgPrefixes.some(x => x === msgContentLower) ) { return {task: "annoyed"}; }
+	if( msgPrefixes.some( x => x === msgContentLower) ) { return {task: "annoyed"}; }
   //if( msgContentLower === "!" || msgContentLower === "hisobot," || msgContentLower === "hisoguchi," ) { return {task: "annoyed"}; }
 	//Manage case B with an object with no task to trigger bot's ignore response (or prevent a botception)
 	//TODO: Manage case B part b (bot_nickname resolution) for all cases
 	//Earlier existing bug: || over && prevented all commands from being read...
-  else if ( message.author.bot || !( msgPrefixes.some(x => msgContentLower.startsWith(x)) ) ) { return new Object(); }
+  else if ( msg.author.bot || !(msgPrefixes.some(x => msgContentLower.startsWith(x))) ) { return new Object(); }
   //else if ( message.author.bot || (!msgContentLower.startsWith('!') && !msgContentLower.startsWith("hisobot,") && !msgContentLower.startsWith("hisoguchi,") ) ) { return new Object(); }
 	
 	
@@ -170,7 +174,7 @@ function commandJSO(msg){
 	
 	delete msgContentLower;
 	
-	console.log("current command content: " + msgContent);
+	console.log("current command content: " + msgContent + " by: " + msg.author.username + " in: " + msg.channel );
 	
 	//set pmFlag on command if (-)pm command flag has been set in command details
 	var pmFlag = (hasSubstr(msgContent, "-pm") || hasSubstr(msgContent, "pm"));
@@ -229,29 +233,34 @@ function onStart(){
 
 //Shut down server (on emergency or for updates)
 function onShutDown(message){
-	const permissions = message.member.permissions;
-	if ( permissions.has("KICK_MEMBERS") ){
-	
-		//console.log("Kweh! (chocobot out!)");
-		message.channel.send("Hisobot out!");
-		
-		const author = message.author;
-		const server = message.guild;
-		/*client.destroy((err) => {
-			console.log(err);
-		});*/
-		console.log(customErrors.getShutDownError().message);
-		console.log("user: " + author.username + " id: " + author.id);
-		console.log("server: " + server.name + " id: " + server.id);
-		
-		delete author, server;
-		
-		//Discord Client Logout
-		client.destroy();
-		//Node.js process exit
-		setTimeout(process.exit, 10*1000);
-	}
-	else { message.channel.send("Heh lol nope"); }
+	try{
+    const permissions = message.member.permissions;
+    if ( permissions.has("KICK_MEMBERS") ){
+    
+      //console.log("Kweh! (chocobot out!)");
+      message.channel.send("Hisobot out!");
+      
+      const author = message.author;
+      const server = message.guild;
+      /*client.destroy((err) => {
+        console.log(err);
+      });*/
+      console.log(customErrors.getShutDownError().message);
+      console.log("user: " + author.username + " id: " + author.id);
+      console.log("server: " + server.name + " id: " + server.id);
+      
+      delete author, server;
+      
+      //Discord Client Logout
+      client.destroy();
+      //Node.js process exit
+      setTimeout(process.exit, 10*1000);
+    }
+    else { message.channel.send("Heh lol nope"); }
+  } catch (err) { 
+    //Could not get permissions
+    console.log(err.message);
+  }
 }
 
 //Feed the bot food (for fun)
@@ -270,13 +279,15 @@ function manageFeeding(details) {
 
 //Add server roles to user based on command details
 function manageRoles(cmd){
+  try{
 	//console.log(cmd.message.channel instanceof Discord.DMChannel);
 	//if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
 	const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
-  var roles = cmd.details.split(","),  guildMember = cmd.message.member;
-	const guild  = client.guilds.find("name", "Terra Battle");
+  const guild  = client.guilds.find("name", "Terra Battle");
 	const guildRoles = guild.roles; //cmd.message.guild.roles;
-	var feedback = "";
+	var roles = cmd.details.split(","),  guildMember = guild.members.get(cmd.message.author.id);
+  
+  var feedback = "";
 	//console.log(guildMember);
 	
 	//Check to make sure the requested role isn't forbidden
@@ -304,6 +315,7 @@ function manageRoles(cmd){
 			catch (err) { 
 				//Role didn't exist
 				console.log(err.message);
+        console.log("User: " + cmd.message.author.name);
 			}
 			
 			if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
@@ -318,6 +330,10 @@ function manageRoles(cmd){
 	});
 	//return feedback responses
 	( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
+  } catch (err) {
+    console.log(err.message);
+    console.log("User: " + cmd.message.author.name);
+  }
 }
 
 
