@@ -578,6 +578,11 @@ client.on('message', message => {
       sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
       sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
 			break;
+
+		case "samatha":
+			sendMessage(command, "from http://i.imgur.com/SLTB7vW.png");
+			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
+			break;
 	    
 		case "vh":
 		case "vengeful":
