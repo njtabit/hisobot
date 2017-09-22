@@ -56,9 +56,9 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
-//var python = require("./python.js");
+var python = require("./python.js");
 var mongo = require("./database.js");
-
+var mongoClient = require('mongodb').MongoClient;
 /*
  * Helper Functions that I will use frequently
  *
@@ -470,7 +470,6 @@ client.on('guildMemberAdd', member => {
 });
 
 
-
 // Search on wiki
 
 client.on('message', message => {
@@ -483,10 +482,33 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-    /*if (message.author.username != "hisobot"){
+    if (message.author.username != "hisobot"){
 	//calls the method on the python object
 	python.hello(message);
-    }*/
+    }
+
+    if (!message.author.bot){
+	var url = "mongodb://localhost:27017/terradb";
+
+	mongoClient.connect(url, function(error, db) {
+	    if (error) {
+		console.log(error);
+		throw error;
+	    }
+	    db.collection("users").insert({id: message.author.username,
+					   time: message.createdTimestamp,
+					   message: message.content
+					  }
+					 ).catch(function(error){
+					     console.log(error);
+					 });
+
+	    python.mongo()
+
+	});
+
+	
+    }
     
 	var command = commandJSO(message);
 	
@@ -560,6 +582,11 @@ client.on('message', message => {
 			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
       sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
       sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+			break;
+
+		case "samatha":
+			sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
+			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 			break;
 	    
 		case "vh":

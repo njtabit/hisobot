@@ -12,5 +12,14 @@ module.exports = {
 	    }
 	    console.log(reply);
 	});
+    },
+
+    mongo: function(){
+	zerorpcClient.invoke("mongo", function(error, reply, streaming) {
+	    if(error){
+		console.log("ERROR: ", error);
+	    }
+	    console.log(reply);
+	});
     }
 }
