@@ -280,56 +280,61 @@ function manageFeeding(details) {
 //Add server roles to user based on command details
 function manageRoles(cmd){
   try{
-	//console.log(cmd.message.channel instanceof Discord.DMChannel);
-	//if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
-	const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
-  const guild  = client.guilds.find("name", "Terra Battle");
-	const guildRoles = guild.roles; //cmd.message.guild.roles;
-	var roles = cmd.details.split(","),  guildMember = guild.members.get(cmd.message.author.id);
-  
-  var feedback = "";
-	//console.log(guildMember);
-	
-	//Check to make sure the requested role isn't forbidden
-	//Find role in guild's role collection
-	//Assign role (or remove role if already in ownership of)
-	//Append response of what was done to "feedback"
-	roles.forEach(function(entry){
-		entry = entry.trim();
-		lowCaseEntry = entry.toLowerCase();
-		
-		//Ignore any attempts to try to get a moderator, admin, companion, bot, or specialty role.
-		//Ignore: metal minion, wiki editor, content creator, pvp extraordinare
-    /*voidRoles.forEach(
-      function(currentValue){
+    //console.log(cmd.message.channel instanceof Discord.DMChannel);
+    //if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
+    const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
+    const guild  = client.guilds.find("name", "Terra Battle");
+    const guildRoles = guild.roles; //cmd.message.guild.roles;
+    var roles = cmd.details.split(","),  guildMember = guild.members.get(cmd.message.author.id);
+    
+    var feedback = "";
+    //console.log(guildMember);
+    const channel = cmd.message.channel;
+    if( channel instanceof Discord.GuildChannel && channel.name !== "bot-use" ){
+      sendMessage(command, "Sorry, " + cmd.message.author.username + " let's take this to #bot-use");
+      return;
+    }
+    
+    //Check to make sure the requested role isn't forbidden
+    //Find role in guild's role collection
+    //Assign role (or remove role if already in ownership of)
+    //Append response of what was done to "feedback"
+    roles.forEach(function(entry){
+      entry = entry.trim();
+      lowCaseEntry = entry.toLowerCase();
+      
+      //Ignore any attempts to try to get a moderator, admin, companion, bot, or specialty role.
+      //Ignore: metal minion, wiki editor, content creator, pvp extraordinare
+      /*voidRoles.forEach(
+        function(currentValue){
+          
+        }
+       );*/ //TODO: Manage Void Role rejection more elegantly
+      if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
         
-      }
-     );*/ //TODO: Manage Void Role rejection more elegantly
-		if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
-			
-			//run requested role name through the roleName DB
-			var roleCheck = openRoles.get(lowCaseEntry); //TODO: Make a DB that allows for server-specific role name checks
-			var role;
-			
-			try{ role = guildRoles.find("name", roleCheck); }
-			catch (err) { 
-				//Role didn't exist
-				console.log(err.message);
-        console.log("User: " + cmd.message.author.name);
-			}
-			
-			if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
-			else if( guildMember.roles.has(role.id) ) {
-				guildMember.removeRole(role);
-				feedback += "I removed the role: " + role.name + "\n"; }
-			else {
-				guildMember.addRole(role);
-				feedback += "I assigned the role: " + role.name + "\n"; }
-		} else { feedback += "FYI, I cannot assign '" + entry + "' roles"; }
-		//guildMember = cmd.message.member;
-	});
-	//return feedback responses
-	( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
+        //run requested role name through the roleName DB
+        var roleCheck = openRoles.get(lowCaseEntry); //TODO: Make a DB that allows for server-specific role name checks
+        var role;
+        
+        try{ role = guildRoles.find("name", roleCheck); }
+        catch (err) { 
+          //Role didn't exist
+          console.log(err.message);
+          console.log("User: " + cmd.message.author.name);
+        }
+        
+        if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
+        else if( guildMember.roles.has(role.id) ) {
+          guildMember.removeRole(role);
+          feedback += "I removed the role: " + role.name + "\n"; }
+        else {
+          guildMember.addRole(role);
+          feedback += "I assigned the role: " + role.name + "\n"; }
+      } else { feedback += "FYI, I cannot assign '" + entry + "' roles"; }
+      //guildMember = cmd.message.member;
+    });
+    //return feedback responses
+    ( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
   } catch (err) {
     console.log(err.message);
     console.log("User: " + cmd.message.author.name);
@@ -459,7 +464,7 @@ client.on('guildMemberAdd', member => {
 		"Hi there, it seems like you are a new member. Welcome to the Discord!\n" +
 		"My name is Hisobot, but you can call me Hisoguchi if you like.\n" +
 		"If you are playing Terra Battle, please type `!role Terra Battle`. "+
-		"If you are playing Terra Battle 2, please type `!role Terra Battle`. "+
+		"If you are playing Terra Battle 2, please type `!role Terra Battle 2`. "+
 		"If you are playing both, please type `!role Terra Battle, Terra Battle 2`."
 	);
 });
