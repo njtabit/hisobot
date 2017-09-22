@@ -281,6 +281,7 @@ function manageFeeding(details) {
 //Add server roles to user based on command details
 function manageRoles(command){
   try{
+    const channel = command.message.channel, guild = client.guilds.find("name", "Terra Battle");
 
     if( channel instanceof Discord.GuildChannel && channel.name !== "bot-use" ){
       //console.log("Wrong channel reception");
