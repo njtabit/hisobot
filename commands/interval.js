@@ -120,7 +120,7 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
     }//End of On-the-hour Alerts
     
     if (alertString.length > 0){
-      const tb1General = client.channels.find("name", "tb-bot-alerts");
+      const tb1General = client.channels.find("name", "tb1-bot-alerts");
       tb1General.send(alertString);
     }
   }

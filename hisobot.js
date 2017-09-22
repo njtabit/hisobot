@@ -78,15 +78,15 @@ function hasSubstr(str, searchStr){
 }
 
 //Check what role the user has that elevates their permissions
-function checkHoistRole(cmd){
-	return cmd.message.member.hoistRole;
+function checkHoistRole(command){
+	return command.message.member.hoistRole;
 }
 
 //send the output message depending on how the command was structured
-function sendMessage(cmd, messageText){
-	(cmd.pmUser ? cmd.message.author.send(messageText) : cmd.message.channel.send(messageText) );
-  //if(cmd.pmUser){ cmd.message.author.send(messageText); }
-	//else { cmd.message.channel.send(messageText); }
+function sendMessage(command, messageText){
+	(command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText) );
+  //if(command.pmUser){ command.message.author.send(messageText); }
+	//else { command.message.channel.send(messageText); }
 }
 
 
@@ -175,6 +175,7 @@ function commandJSO(msg){
 	delete msgContentLower;
 	
 	console.log("current command content: " + msgContent + " by: " + msg.author.username + " in: " + msg.channel );
+  if(msg.guild !== undefined){console.log("Guild is: " + msg.guild);}
 	
 	//set pmFlag on command if (-)pm command flag has been set in command details
 	var pmFlag = (hasSubstr(msgContent, "-pm") || hasSubstr(msgContent, "pm"));
@@ -278,22 +279,19 @@ function manageFeeding(details) {
 }
 
 //Add server roles to user based on command details
-function manageRoles(cmd){
+function manageRoles(command){
   try{
-    //console.log(cmd.message.channel instanceof Discord.DMChannel);
-    //if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
-    const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
-    const guild  = client.guilds.find("name", "Terra Battle");
-    const guildRoles = guild.roles; //cmd.message.guild.roles;
-    var roles = cmd.details.split(","),  guildMember = guild.members.get(cmd.message.author.id);
-    
-    var feedback = "";
-    //console.log(guildMember);
-    const channel = cmd.message.channel;
+
     if( channel instanceof Discord.GuildChannel && channel.name !== "bot-use" ){
-      sendMessage(command, "Sorry, " + cmd.message.author.username + " let's take this to #bot-use");
+      //console.log("Wrong channel reception");
+      sendMessage(command, "Sorry, " + command.message.author.username + " let's take this to #bot-use");
       return;
     }
+    const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
+    const guildRoles = command.message.guild.roles; //command.message.guild.roles;
+    var roles = command.details.split(","),  guildMember = guild.members.get(command.message.author.id);
+    
+    var feedback = "";
     
     //Check to make sure the requested role isn't forbidden
     //Find role in guild's role collection
@@ -320,7 +318,7 @@ function manageRoles(cmd){
         catch (err) { 
           //Role didn't exist
           console.log(err.message);
-          console.log("User: " + cmd.message.author.name);
+          console.log("User: " + command.message.author.name);
         }
         
         if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
@@ -331,13 +329,13 @@ function manageRoles(cmd){
           guildMember.addRole(role);
           feedback += "I assigned the role: " + role.name + "\n"; }
       } else { feedback += "FYI, I cannot assign '" + entry + "' roles"; }
-      //guildMember = cmd.message.member;
+      //guildMember = command.message.member;
     });
     //return feedback responses
-    ( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
+    ( feedback.length > 0 ? command.message.channel.send(feedback) : "" );
   } catch (err) {
     console.log(err.message);
-    console.log("User: " + cmd.message.author.name);
+    console.log("User: " + command.message.author.username);
   }
 }
 
@@ -347,9 +345,9 @@ function hasLambda(str){
 	return str.search("lambda") || str.search("^") || str.search("Λ") ;
 }
 
-function wikiSearch(cmd){
-	var bForCharacter = hasSubstr(cmd.details, "character");
-	var bForLambda = hasLambda(cmd.details);
+function wikiSearch(command){
+	var bForCharacter = hasSubstr(command.details, "character");
+	var bForLambda = hasLambda(command.details);
 	
 	var x = "";
 	request("http://terrabattle.wikia.com/wiki/Special:Search?search=Nazuna&fulltext=Search&format=json", function(error, response, body) {
@@ -370,7 +368,7 @@ function wikiSearch(cmd){
 	});
 }
 
-function wikitest(cmd){
+function wikitest(command){
 	var x = "", output = "Lemme check...\n";
 	request("http://terrabattle.wikia.com/wiki/Special:Search?search=Nazuna&fulltext=Search&format=json", function(error, response, body) {
 		//console.log(body);
@@ -388,7 +386,7 @@ function wikitest(cmd){
 		
 		//message.channel.send(body); //Voids 2k character limit of Discord messages
 		//x = body;
-		sendMessage(cmd, output);
+		sendMessage(command, output);
 	});
 }
 
@@ -404,23 +402,23 @@ function metalZoneString(zoneType, zoneNum, zoneTime, showStamina){
 	return outStr;
 }
 
-function metalZone(cmd){
-	var showStamina = (hasSubstr(cmd.details, "-s") || hasSubstr(cmd.details, "s"));
-	if (showStamina) {cmd.details = cmd.details.replace(/-?s/gi, "").trim();}
+function metalZone(command){
+	var showStamina = (hasSubstr(command.details, "-s") || hasSubstr(command.details, "s"));
+	if (showStamina) {command.details = command.details.replace(/-?s/gi, "").trim();}
 	var futureMZSchedule = "";
 	var schedule = "Time remaining until: (D:HH:MM)\n```";
-	if (cmd.details == "" || cmd.details == "all") {
+	if (command.details == "" || command.details == "all") {
 		futureMZSchedule = MZSchedule.getNextZoneSchedule();
 		for (var zone = 0; zone < MZSchedule._MAX_ZONE; ++zone){
 			schedule += metalZoneString("MZ",   (zone+1), futureMZSchedule.openZoneSchedule[zone], showStamina);
 			schedule += metalZoneString("AHTK", (zone+1), futureMZSchedule.openAHTKSchedule[zone], showStamina) + "\n";
 		}
 		//schedule += "```";
-		//cmd.message.channel.send(schedule);
+		//command.message.channel.send(schedule);
 	}
 	else{
 		futureMZSchedule = "";
-		switch ( parseInt(cmd.details) ){
+		switch ( parseInt(command.details) ){
 			case 1: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(1); break;
 			case 2: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(2); break;
 			case 3: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(3); break;
@@ -428,16 +426,16 @@ function metalZone(cmd){
 			case 5: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(5); break;
 			case 6: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(6); break;
 			case 7: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(7); break;
-			default: cmd.message.channel.send( "I don't know that zone. You doing okay?" );
+			default: command.message.channel.send( "I don't know that zone. You doing okay?" );
 		}
-		schedule += metalZoneString("MZ",   cmd.details, futureMZSchedule.openZoneSchedule, showStamina);
-		schedule += metalZoneString("AHTK", cmd.details, futureMZSchedule.openAHTKSchedule, showStamina) + "\n";
-		///cmd.message.channel.send(schedule);
+		schedule += metalZoneString("MZ",   command.details, futureMZSchedule.openZoneSchedule, showStamina);
+		schedule += metalZoneString("AHTK", command.details, futureMZSchedule.openAHTKSchedule, showStamina) + "\n";
+		///command.message.channel.send(schedule);
 	}
 	schedule += "```";
-	//(cmd.pmUser ? cmd.message.author.send(schedule) : cmd.message.channel.send(schedule) );
-	//cmd.message.channel.send(schedule);
-	sendMessage(cmd, schedule);
+	//(command.pmUser ? command.message.author.send(schedule) : command.message.channel.send(schedule) );
+	//command.message.channel.send(schedule);
+	sendMessage(command, schedule);
 }
 
 
