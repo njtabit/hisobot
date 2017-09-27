@@ -494,10 +494,10 @@ client.on('message', message => {
 	    /*db.collection("users").insert({id: message.author.username,
 					   time: message.createdTimestamp,
 					   message: message.content
-					  }*/
+					  }
 					 ).catch(function(error){
 					     console.log(error);
-					 });
+					 });*/
 	    python.mongo()
 	});
     }
