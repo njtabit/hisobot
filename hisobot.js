@@ -56,9 +56,11 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
+
 var python = require("./python.js");
 var mongo = require("./database.js");
 var mongoClient = require('mongodb').MongoClient;
+
 /*
  * Helper Functions that I will use frequently
  *
@@ -582,6 +584,12 @@ client.on('message', message => {
 			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 			break;
 	    
+		case "tb2elements":
+			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
+      sendMessage(command, "Terra Battle 2 elements chart");
+      sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+			break;
+
 		case "vh":
 		case "vengeful":
       sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
@@ -727,6 +735,5 @@ client.on('message', message => {
 //             message.channel.send('Error');
 //         }
 //     });
-
 
 client.login( token );
