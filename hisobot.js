@@ -211,12 +211,8 @@ function pluck(array){
 }
 
 function hasRole(mem, role){
-    if(pluck(mem.roles).includes(role)){
-        return true;
-    } else {
-        return false;
-    }
-}/**/
+    return (pluck(mem.roles).includes(role))
+}
 
 function onStart(){
 	console.log("Hisobot online!");
@@ -502,12 +498,8 @@ client.on('message', message => {
 					 ).catch(function(error){
 					     console.log(error);
 					 });
-
 	    python.mongo()
-
 	});
-
-	
     }
     
 	var command = commandJSO(message);
