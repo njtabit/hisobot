@@ -175,7 +175,7 @@ function commandJSO(msg){
 	delete msgContentLower;
 	
 	console.log("current command content: " + msgContent + " by: " + msg.author.username + " in: " + msg.channel );
-  if(msg.guild !== undefined){console.log("Guild is: " + msg.guild);}
+  //if(msg.guild !== null){console.log("Guild is: " + msg.guild);}
 	
 	//set pmFlag on command if (-)pm command flag has been set in command details
 	var pmFlag = (hasSubstr(msgContent, "-pm") || hasSubstr(msgContent, "pm"));
@@ -221,6 +221,7 @@ function hasRole(mem, role){
 
 function onStart(){
 	console.log("Hisobot online!");
+  console.log(new Date());
   
   let now = new Date(), nextMinute = new Date();
     nextMinute.setMilliseconds(0); nextMinute.setSeconds(0); nextMinute.setMinutes(nextMinute.getMinutes() +1);
@@ -289,7 +290,7 @@ function manageRoles(command){
       return;
     }
     const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
-    const guildRoles = command.message.guild.roles; //command.message.guild.roles;
+    const guildRoles = guild.roles; //command.message.guild.roles;
     var roles = command.details.split(","),  guildMember = guild.members.get(command.message.author.id);
     
     var feedback = "";
@@ -494,10 +495,10 @@ client.on('message', message => {
 		console.log(error);
 		throw error;
 	    }
-	    db.collection("users").insert({id: message.author.username,
+	    /*db.collection("users").insert({id: message.author.username,
 					   time: message.createdTimestamp,
 					   message: message.content
-					  }
+					  }*/
 					 ).catch(function(error){
 					     console.log(error);
 					 });
@@ -526,7 +527,8 @@ client.on('message', message => {
 		case "role":
 		case "roles":
 			//response = manageRoles(command);
-			manageRoles(command);
+			//manageRoles(command);
+      client.setTimeout(manageRoles, 1*1000, command);
 			/*if (Response.response == "failure"){
 				message.channel.send("This command only works in guild chats");
 			} else { message.channel.send( Response.response ); }*/
