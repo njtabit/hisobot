@@ -1,6 +1,6 @@
 /*
  * Created:				  01 Aug 2017
- * Last updated:		14 Sept 2017
+ * Last updated:		21 Sept 2017
  * Developer(s):		CodedLotus
  * Description:			Return a Discord.JS Collection object with pairs for names
  * Version #:			1.1.0
@@ -25,14 +25,15 @@ roleNames.set("terra battle 1", roleStrings[0]);
 roleNames.set("tb", roleStrings[0]);
 roleNames.set("tb1", roleStrings[0]);
 
-roleNames.set("terra battle 2",roleStrings[1]);
-roleNames.set("tb2",roleStrings[1]);
+roleNames.set("terra battle 2", roleStrings[1]);
+roleNames.set("terra battle2", roleStrings[1]);
+roleNames.set("tb2", roleStrings[1]);
 
-roleNames.set("terra wars",roleStrings[2]);
-roleNames.set("tw",roleStrings[2]);
+roleNames.set("terra wars", roleStrings[2]);
+roleNames.set("tw", roleStrings[2]);
 
-roleNames.set("veteran",roleStrings[3]);
-roleNames.set("vet",roleStrings[3]);
+roleNames.set("veteran", roleStrings[3]);
+roleNames.set("vet", roleStrings[3]);
 
 roleNames.set("tbf", roleStrings[4]);
 roleNames.set("forum", roleStrings[4]);

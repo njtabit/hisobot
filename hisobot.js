@@ -56,9 +56,9 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
-//var python = require("./python.js");
+var python = require("./python.js");
 var mongo = require("./database.js");
-
+var mongoClient = require('mongodb').MongoClient;
 /*
  * Helper Functions that I will use frequently
  *
@@ -78,15 +78,15 @@ function hasSubstr(str, searchStr){
 }
 
 //Check what role the user has that elevates their permissions
-function checkHoistRole(cmd){
-	return cmd.message.member.hoistRole;
+function checkHoistRole(command){
+	return command.message.member.hoistRole;
 }
 
 //send the output message depending on how the command was structured
-function sendMessage(cmd, messageText){
-	(cmd.pmUser ? cmd.message.author.send(messageText) : cmd.message.channel.send(messageText) );
-  //if(cmd.pmUser){ cmd.message.author.send(messageText); }
-	//else { cmd.message.channel.send(messageText); }
+function sendMessage(command, messageText){
+	(command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText) );
+  //if(command.pmUser){ command.message.author.send(messageText); }
+	//else { command.message.channel.send(messageText); }
 }
 
 
@@ -175,6 +175,7 @@ function commandJSO(msg){
 	delete msgContentLower;
 	
 	console.log("current command content: " + msgContent + " by: " + msg.author.username + " in: " + msg.channel );
+  //if(msg.guild !== null){console.log("Guild is: " + msg.guild);}
 	
 	//set pmFlag on command if (-)pm command flag has been set in command details
 	var pmFlag = (hasSubstr(msgContent, "-pm") || hasSubstr(msgContent, "pm"));
@@ -211,15 +212,12 @@ function pluck(array){
 }
 
 function hasRole(mem, role){
-    if(pluck(mem.roles).includes(role)){
-        return true;
-    } else {
-        return false;
-    }
-}/**/
+    return (pluck(mem.roles).includes(role))
+}
 
 function onStart(){
 	console.log("Hisobot online!");
+  console.log(new Date());
   
   let now = new Date(), nextMinute = new Date();
     nextMinute.setMilliseconds(0); nextMinute.setSeconds(0); nextMinute.setMinutes(nextMinute.getMinutes() +1);
@@ -278,61 +276,64 @@ function manageFeeding(details) {
 }
 
 //Add server roles to user based on command details
-function manageRoles(cmd){
+function manageRoles(command){
   try{
-	//console.log(cmd.message.channel instanceof Discord.DMChannel);
-	//if (cmd.message.channel instanceof Discord.DMChannel) { sendMessage(cmd, "This command currently only works in guild chats"); return "failure"; }
-	const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
-  const guild  = client.guilds.find("name", "Terra Battle");
-	const guildRoles = guild.roles; //cmd.message.guild.roles;
-	var roles = cmd.details.split(","),  guildMember = guild.members.get(cmd.message.author.id);
-  
-  var feedback = "";
-	//console.log(guildMember);
-	
-	//Check to make sure the requested role isn't forbidden
-	//Find role in guild's role collection
-	//Assign role (or remove role if already in ownership of)
-	//Append response of what was done to "feedback"
-	roles.forEach(function(entry){
-		entry = entry.trim();
-		lowCaseEntry = entry.toLowerCase();
-		
-		//Ignore any attempts to try to get a moderator, admin, companion, bot, or specialty role.
-		//Ignore: metal minion, wiki editor, content creator, pvp extraordinare
-    /*voidRoles.forEach(
-      function(currentValue){
+    const channel = command.message.channel, guild = client.guilds.find("name", "Terra Battle");
+
+    if( channel instanceof Discord.GuildChannel && channel.name !== "bot-use" ){
+      //console.log("Wrong channel reception");
+      sendMessage(command, "Sorry, " + command.message.author.username + " let's take this to #bot-use");
+      return;
+    }
+    const openRoles = roleNames.openRoles, voidRoles = roleNames.voidRoles;
+    const guildRoles = guild.roles; //command.message.guild.roles;
+    var roles = command.details.split(","),  guildMember = guild.members.get(command.message.author.id);
+    
+    var feedback = "";
+    
+    //Check to make sure the requested role isn't forbidden
+    //Find role in guild's role collection
+    //Assign role (or remove role if already in ownership of)
+    //Append response of what was done to "feedback"
+    roles.forEach(function(entry){
+      entry = entry.trim();
+      lowCaseEntry = entry.toLowerCase();
+      
+      //Ignore any attempts to try to get a moderator, admin, companion, bot, or specialty role.
+      //Ignore: metal minion, wiki editor, content creator, pvp extraordinare
+      /*voidRoles.forEach(
+        function(currentValue){
+          
+        }
+       );*/ //TODO: Manage Void Role rejection more elegantly
+      if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
         
-      }
-     );*/ //TODO: Manage Void Role rejection more elegantly
-		if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
-			
-			//run requested role name through the roleName DB
-			var roleCheck = openRoles.get(lowCaseEntry); //TODO: Make a DB that allows for server-specific role name checks
-			var role;
-			
-			try{ role = guildRoles.find("name", roleCheck); }
-			catch (err) { 
-				//Role didn't exist
-				console.log(err.message);
-        console.log("User: " + cmd.message.author.name);
-			}
-			
-			if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
-			else if( guildMember.roles.has(role.id) ) {
-				guildMember.removeRole(role);
-				feedback += "I removed the role: " + role.name + "\n"; }
-			else {
-				guildMember.addRole(role);
-				feedback += "I assigned the role: " + role.name + "\n"; }
-		} else { feedback += "FYI, I cannot assign '" + entry + "' roles"; }
-		//guildMember = cmd.message.member;
-	});
-	//return feedback responses
-	( feedback.length > 0 ? cmd.message.channel.send(feedback) : "" );
+        //run requested role name through the roleName DB
+        var roleCheck = openRoles.get(lowCaseEntry); //TODO: Make a DB that allows for server-specific role name checks
+        var role;
+        
+        try{ role = guildRoles.find("name", roleCheck); }
+        catch (err) { 
+          //Role didn't exist
+          console.log(err.message);
+          console.log("User: " + command.message.author.name);
+        }
+        
+        if( typeof role === 'undefined' || role == null ){ feedback += "So... role '" + entry + "' does not exist\n"; }
+        else if( guildMember.roles.has(role.id) ) {
+          guildMember.removeRole(role);
+          feedback += "I removed the role: " + role.name + "\n"; }
+        else {
+          guildMember.addRole(role);
+          feedback += "I assigned the role: " + role.name + "\n"; }
+      } else { feedback += "FYI, I cannot assign '" + entry + "' roles"; }
+      //guildMember = command.message.member;
+    });
+    //return feedback responses
+    ( feedback.length > 0 ? command.message.channel.send(feedback) : "" );
   } catch (err) {
     console.log(err.message);
-    console.log("User: " + cmd.message.author.name);
+    console.log("User: " + command.message.author.username);
   }
 }
 
@@ -342,9 +343,9 @@ function hasLambda(str){
 	return str.search("lambda") || str.search("^") || str.search("Λ") ;
 }
 
-function wikiSearch(cmd){
-	var bForCharacter = hasSubstr(cmd.details, "character");
-	var bForLambda = hasLambda(cmd.details);
+function wikiSearch(command){
+	var bForCharacter = hasSubstr(command.details, "character");
+	var bForLambda = hasLambda(command.details);
 	
 	var x = "";
 	request("http://terrabattle.wikia.com/wiki/Special:Search?search=Nazuna&fulltext=Search&format=json", function(error, response, body) {
@@ -365,7 +366,7 @@ function wikiSearch(cmd){
 	});
 }
 
-function wikitest(cmd){
+function wikitest(command){
 	var x = "", output = "Lemme check...\n";
 	request("http://terrabattle.wikia.com/wiki/Special:Search?search=Nazuna&fulltext=Search&format=json", function(error, response, body) {
 		//console.log(body);
@@ -383,7 +384,7 @@ function wikitest(cmd){
 		
 		//message.channel.send(body); //Voids 2k character limit of Discord messages
 		//x = body;
-		sendMessage(cmd, output);
+		sendMessage(command, output);
 	});
 }
 
@@ -399,23 +400,23 @@ function metalZoneString(zoneType, zoneNum, zoneTime, showStamina){
 	return outStr;
 }
 
-function metalZone(cmd){
-	var showStamina = (hasSubstr(cmd.details, "-s") || hasSubstr(cmd.details, "s"));
-	if (showStamina) {cmd.details = cmd.details.replace(/-?s/gi, "").trim();}
+function metalZone(command){
+	var showStamina = (hasSubstr(command.details, "-s") || hasSubstr(command.details, "s"));
+	if (showStamina) {command.details = command.details.replace(/-?s/gi, "").trim();}
 	var futureMZSchedule = "";
 	var schedule = "Time remaining until: (D:HH:MM)\n```";
-	if (cmd.details == "" || cmd.details == "all") {
+	if (command.details == "" || command.details == "all") {
 		futureMZSchedule = MZSchedule.getNextZoneSchedule();
 		for (var zone = 0; zone < MZSchedule._MAX_ZONE; ++zone){
 			schedule += metalZoneString("MZ",   (zone+1), futureMZSchedule.openZoneSchedule[zone], showStamina);
 			schedule += metalZoneString("AHTK", (zone+1), futureMZSchedule.openAHTKSchedule[zone], showStamina) + "\n";
 		}
 		//schedule += "```";
-		//cmd.message.channel.send(schedule);
+		//command.message.channel.send(schedule);
 	}
 	else{
 		futureMZSchedule = "";
-		switch ( parseInt(cmd.details) ){
+		switch ( parseInt(command.details) ){
 			case 1: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(1); break;
 			case 2: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(2); break;
 			case 3: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(3); break;
@@ -423,16 +424,16 @@ function metalZone(cmd){
 			case 5: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(5); break;
 			case 6: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(6); break;
 			case 7: futureMZSchedule = MZSchedule.getSpecificZoneSchedule(7); break;
-			default: cmd.message.channel.send( "I don't know that zone. You doing okay?" );
+			default: command.message.channel.send( "I don't know that zone. You doing okay?" );
 		}
-		schedule += metalZoneString("MZ",   cmd.details, futureMZSchedule.openZoneSchedule, showStamina);
-		schedule += metalZoneString("AHTK", cmd.details, futureMZSchedule.openAHTKSchedule, showStamina) + "\n";
-		///cmd.message.channel.send(schedule);
+		schedule += metalZoneString("MZ",   command.details, futureMZSchedule.openZoneSchedule, showStamina);
+		schedule += metalZoneString("AHTK", command.details, futureMZSchedule.openAHTKSchedule, showStamina) + "\n";
+		///command.message.channel.send(schedule);
 	}
 	schedule += "```";
-	//(cmd.pmUser ? cmd.message.author.send(schedule) : cmd.message.channel.send(schedule) );
-	//cmd.message.channel.send(schedule);
-	sendMessage(cmd, schedule);
+	//(command.pmUser ? command.message.author.send(schedule) : command.message.channel.send(schedule) );
+	//command.message.channel.send(schedule);
+	sendMessage(command, schedule);
 }
 
 
@@ -459,11 +460,10 @@ client.on('guildMemberAdd', member => {
 		"Hi there, it seems like you are a new member. Welcome to the Discord!\n" +
 		"My name is Hisobot, but you can call me Hisoguchi if you like.\n" +
 		"If you are playing Terra Battle, please type `!role Terra Battle`. "+
-		"If you are playing Terra Battle 2, please type `!role Terra Battle`. "+
+		"If you are playing Terra Battle 2, please type `!role Terra Battle 2`. "+
 		"If you are playing both, please type `!role Terra Battle, Terra Battle 2`."
 	);
 });
-
 
 
 // Search on wiki
@@ -478,10 +478,29 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-    /*if (message.author.username != "hisobot"){
+    if (message.author.username != "hisobot"){
 	//calls the method on the python object
 	python.hello(message);
-    }*/
+    }
+
+    if (!message.author.bot){
+	var url = "mongodb://localhost:27017/terradb";
+
+	mongoClient.connect(url, function(error, db) {
+	    if (error) {
+		console.log(error);
+		throw error;
+	    }
+	    /*db.collection("users").insert({id: message.author.username,
+					   time: message.createdTimestamp,
+					   message: message.content
+					  }
+					 ).catch(function(error){
+					     console.log(error);
+					 });*/
+	    python.mongo()
+	});
+    }
     
 	var command = commandJSO(message);
 	
@@ -500,7 +519,8 @@ client.on('message', message => {
 		case "role":
 		case "roles":
 			//response = manageRoles(command);
-			manageRoles(command);
+			//manageRoles(command);
+      client.setTimeout(manageRoles, 1*1000, command);
 			/*if (Response.response == "failure"){
 				message.channel.send("This command only works in guild chats");
 			} else { message.channel.send( Response.response ); }*/
@@ -555,6 +575,11 @@ client.on('message', message => {
 			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
       sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
       sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+			break;
+
+		case "samatha":
+			sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
+			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 			break;
 	    
 		case "vh":
