@@ -203,8 +203,12 @@ function commandJSO(msg){
 //Establishes the alert system for HisoBot
 //14 Sept 2017: I don't know how to nest Discord Client functions within one another to make it work yet
 function alerts(client, MZSchedule, DQSchedule){
-  IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
-  client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
+    try {
+	client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    } catch (err){
+	console.log(client);
+    }
 }
 
 
@@ -214,7 +218,7 @@ function pluck(array){
 }
 
 function hasRole(mem, role){
-    return (pluck(mem.roles).includes(role))
+    return pluck(mem.roles).includes(role)
 }
 
 function onStart(){
@@ -307,7 +311,8 @@ function manageRoles(command){
         function(currentValue){
           
         }
-       );*/ //TODO: Manage Void Role rejection more elegantly
+	);*/ //TODO: Manage Void Role rejection more elegantly
+
       if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
         
         //run requested role name through the roleName DB
@@ -606,13 +611,13 @@ client.on('message', message => {
 			//Ignore as if it wasn't a relevant message
 			break;
 
-    default:
+                default:
 			//Cases where it isn't a recognized command
 			//message.channel.send("What?\nRun that by me again.");
 			//response = "What?\nRun that by me again.";
 			sendMessage(command, "What?\nRun that by me again.");
 	}
-	
+
 	//send feedback depending on if pmFlag is raised.
 	//if(command.pmUser){ message.author.send(response); } else { message.channel.send(response); }
 	
