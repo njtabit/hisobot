@@ -203,8 +203,12 @@ function commandJSO(msg){
 //Establishes the alert system for HisoBot
 //14 Sept 2017: I don't know how to nest Discord Client functions within one another to make it work yet
 function alerts(client, MZSchedule, DQSchedule){
-  IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
-  client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
+    try {
+	client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    } catch (err){
+	console.log(client);
+    }
 }
 
 
@@ -214,7 +218,7 @@ function pluck(array){
 }
 
 function hasRole(mem, role){
-    return (pluck(mem.roles).includes(role))
+    return pluck(mem.roles).includes(role)
 }
 
 function onStart(){
@@ -254,7 +258,7 @@ function onShutDown(message){
       //Discord Client Logout
       client.destroy();
       //Node.js process exit
-      setTimeout(process.exit, 10*1000);
+      setTimeout(process.exit, 1*1000);
     }
     else { message.channel.send("Heh lol nope"); }
   } catch (err) { 
@@ -307,7 +311,8 @@ function manageRoles(command){
         function(currentValue){
           
         }
-       );*/ //TODO: Manage Void Role rejection more elegantly
+	);*/ //TODO: Manage Void Role rejection more elegantly
+
       if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
         
         //run requested role name through the roleName DB
@@ -480,9 +485,9 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-    if (message.author.username != "hisobot"){
+  /*  if (message.author.username != "hisobot"){
 	//calls the method on the python object
-	python.hello(message);
+	//python.hello(message);
     }
 
     if (!message.author.bot){
@@ -499,10 +504,10 @@ client.on('message', message => {
 					  }
 					 ).catch(function(error){
 					     console.log(error);
-					 });*/
+					 });/
 	    python.mongo()
 	});
-    }
+    }*/
     
 	var command = commandJSO(message);
 	
@@ -573,21 +578,19 @@ client.on('message', message => {
 			message.channel.send( "Heh, I'm ignoring you" );
 	                break;
 
+    /* TB agnostic memes/material */
+    case "samatha":
+    case "samantha":
+			//sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
+      sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
+			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
+			break;
+    
+    /* TB1-specific cases */
 		case "arachnobot":
 			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
       sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
       sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
-			break;
-
-		case "samatha":
-			sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
-			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
-			break;
-	    
-		case "tb2elements":
-			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
-      sendMessage(command, "Terra Battle 2 elements chart");
-      sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
 			break;
 
 		case "vh":
@@ -596,7 +599,15 @@ client.on('message', message => {
       sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
 			//message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
 			break;
-			
+    
+    /* TB2-specific cases */  
+		case "tb2elements":
+			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
+      sendMessage(command, "Terra Battle 2 elements chart");
+      sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+			break;
+    
+    
 		case "repo":
 			message.author.send("https://github.com/bokochaos/hisobot");
 			break;
@@ -606,13 +617,13 @@ client.on('message', message => {
 			//Ignore as if it wasn't a relevant message
 			break;
 
-    default:
+                default:
 			//Cases where it isn't a recognized command
 			//message.channel.send("What?\nRun that by me again.");
 			//response = "What?\nRun that by me again.";
 			sendMessage(command, "What?\nRun that by me again.");
 	}
-	
+
 	//send feedback depending on if pmFlag is raised.
 	//if(command.pmUser){ message.author.send(response); } else { message.channel.send(response); }
 	
