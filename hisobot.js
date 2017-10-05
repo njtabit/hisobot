@@ -475,15 +475,17 @@ client.on('guildMemberAdd', member => {
 
 function tb2wiki(command){
     argument = command.details;
-    request("https://terrabattle2.gamepedia.com/"+argument, function(error, response, body) {
+    argument = argument.split(" ").join("_");
+    var wiki = "https://terrabattle2.gamepedia.com/index.php?search=" + argument;
+    request(wiki, function(error, response, body) {
     	if (error) {
     	    console.log(error);
     	    throw error;
     	}
-	if(body.includes("There is currently no text in this page.")){
+	if(body.includes("There were no results matching the query.")){
 	    sendMessage(command, "Page not found");
 	} else {
-	    sendMessage(command, "https://terrabattle2.gamepedia.com/" + argument + "");
+	    sendMessage(command, wiki);
 	}
     });
 };
