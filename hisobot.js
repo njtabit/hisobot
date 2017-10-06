@@ -86,9 +86,7 @@ function checkHoistRole(command){
 
 //send the output message depending on how the command was structured
 function sendMessage(command, messageText){
-	(command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText) );
-  //if(command.pmUser){ command.message.author.send(messageText); }
-	//else { command.message.channel.send(messageText); }
+	command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText);
 }
 
 
@@ -475,6 +473,24 @@ client.on('guildMemberAdd', member => {
 
 // Search on wiki
 
+function tb2wiki(command){
+    argument = command.details;
+    argument = argument.split(" ").join("_");
+    var wiki = "https://terrabattle2.gamepedia.com/index.php?search=" + argument;
+    request(wiki, function(error, response, body) {
+    	if (error) {
+    	    console.log(error);
+    	    throw error;
+    	}
+	if(body.includes("There were no results matching the query.")){
+	    sendMessage(command, "Page not found");
+	} else {
+	    sendMessage(command, wiki);
+	}
+    });
+};
+
+
 client.on('message', message => {
 	
 	/*
@@ -527,7 +543,7 @@ client.on('message', message => {
 		case "roles":
 			//response = manageRoles(command);
 			//manageRoles(command);
-      client.setTimeout(manageRoles, 1*1000, command);
+			client.setTimeout(manageRoles, 1*1000, command);
 			/*if (Response.response == "failure"){
 				message.channel.send("This command only works in guild chats");
 			} else { message.channel.send( Response.response ); }*/
@@ -536,10 +552,8 @@ client.on('message', message => {
 		case "wikitest":
 			wikitest(command);
 			break;
-		
+
 		case "hungry?":
-			//response = "Always";
-			//if(command.pmUser){ message.author.send("Always"); } else { message.channel.send("Always"); }
 			sendMessage(command, "Always")
 			break;
 		
@@ -579,34 +593,36 @@ client.on('message', message => {
 	                break;
 
     /* TB agnostic memes/material */
-    case "samatha":
-    case "samantha":
-			//sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
-      sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
+		case "samatha":
+		case "samantha":
+			sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
 			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 			break;
     
     /* TB1-specific cases */
 		case "arachnobot":
-			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
-      sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
-      sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+			sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
+			sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
 			break;
 
 		case "vh":
 		case "vengeful":
-      sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
-      sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
-			//message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
+                        sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
+                        sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
 			break;
     
-    /* TB2-specific cases */  
+    /* TB2-specific cases */
+
+		case "tb2":
+		case "tb2wiki":
+		case "wiki2":
+			tb2wiki(command);
+			break;
+	    
 		case "tb2elements":
-			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
-      sendMessage(command, "Terra Battle 2 elements chart");
-      sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+			sendMessage(command, "Terra Battle 2 elements chart");
+			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
 			break;
-    
     
 		case "repo":
 			message.author.send("https://github.com/bokochaos/hisobot");
