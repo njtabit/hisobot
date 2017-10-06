@@ -623,6 +623,11 @@ client.on('message', message => {
 			sendMessage(command, "Terra Battle 2 elements chart");
 			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
 			break;
+
+		case "tb2elementsgraph":
+			sendMessage(command, "Terra Battle 2 elements graph");
+			sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));
+			break;
     
 		case "repo":
 			message.author.send("https://github.com/bokochaos/hisobot");
