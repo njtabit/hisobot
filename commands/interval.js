@@ -120,8 +120,12 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
     }//End of On-the-hour Alerts
     
     if (alertString.length > 0){
-      const tb1General = client.channels.find("name", "tb1-bot-alerts");
-      tb1General.send(alertString);
+	const tb1General = client.channels.find("name", "tb1-bot-alerts");
+	if (tb1General != null){
+	    tb1General.send(alertString);
+	} else {
+	    console.log("tb1General was null");
+	}
     }
   }
 }

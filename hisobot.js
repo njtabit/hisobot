@@ -56,9 +56,11 @@ const client = new Discord.Client();
  * Used for HTTP requests for JSON data
  */
 var request = require("request");
+
 var python = require("./python.js");
 var mongo = require("./database.js");
 var mongoClient = require('mongodb').MongoClient;
+
 /*
  * Helper Functions that I will use frequently
  *
@@ -84,9 +86,7 @@ function checkHoistRole(command){
 
 //send the output message depending on how the command was structured
 function sendMessage(command, messageText){
-	(command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText) );
-  //if(command.pmUser){ command.message.author.send(messageText); }
-	//else { command.message.channel.send(messageText); }
+	command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText);
 }
 
 
@@ -201,8 +201,12 @@ function commandJSO(msg){
 //Establishes the alert system for HisoBot
 //14 Sept 2017: I don't know how to nest Discord Client functions within one another to make it work yet
 function alerts(client, MZSchedule, DQSchedule){
-  IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
-  client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    IntervalAlerts(client, MZSchedule, DQSchedule); //call at the start of the first minute
+    try {
+	client.setInterval(IntervalAlerts, 1000*60, client, MZSchedule, DQSchedule);
+    } catch (err){
+	console.log(client);
+    }
 }
 
 
@@ -212,7 +216,7 @@ function pluck(array){
 }
 
 function hasRole(mem, role){
-    return (pluck(mem.roles).includes(role))
+    return pluck(mem.roles).includes(role)
 }
 
 function onStart(){
@@ -252,7 +256,7 @@ function onShutDown(message){
       //Discord Client Logout
       client.destroy();
       //Node.js process exit
-      setTimeout(process.exit, 10*1000);
+      setTimeout(process.exit, 1*1000);
     }
     else { message.channel.send("Heh lol nope"); }
   } catch (err) { 
@@ -305,7 +309,8 @@ function manageRoles(command){
         function(currentValue){
           
         }
-       );*/ //TODO: Manage Void Role rejection more elegantly
+	);*/ //TODO: Manage Void Role rejection more elegantly
+
       if (!(voidRoles.some( x => lowCaseEntry.includes(x) )) ){
         
         //run requested role name through the roleName DB
@@ -468,6 +473,24 @@ client.on('guildMemberAdd', member => {
 
 // Search on wiki
 
+function tb2wiki(command){
+    argument = command.details;
+    argument = argument.split(" ").join("_");
+    var wiki = "https://terrabattle2.gamepedia.com/index.php?search=" + argument;
+    request(wiki, function(error, response, body) {
+    	if (error) {
+    	    console.log(error);
+    	    throw error;
+    	}
+	if(body.includes("There were no results matching the query.")){
+	    sendMessage(command, "Page not found");
+	} else {
+	    sendMessage(command, wiki);
+	}
+    });
+};
+
+
 client.on('message', message => {
 	
 	/*
@@ -478,9 +501,9 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-    if (message.author.username != "hisobot"){
+  /*  if (message.author.username != "hisobot"){
 	//calls the method on the python object
-	python.hello(message);
+	//python.hello(message);
     }
 
     if (!message.author.bot){
@@ -497,10 +520,10 @@ client.on('message', message => {
 					  }
 					 ).catch(function(error){
 					     console.log(error);
-					 });*/
+					 });/
 	    python.mongo()
 	});
-    }
+    }*/
     
 	var command = commandJSO(message);
 	
@@ -520,7 +543,7 @@ client.on('message', message => {
 		case "roles":
 			//response = manageRoles(command);
 			//manageRoles(command);
-      client.setTimeout(manageRoles, 1*1000, command);
+			client.setTimeout(manageRoles, 1*1000, command);
 			/*if (Response.response == "failure"){
 				message.channel.send("This command only works in guild chats");
 			} else { message.channel.send( Response.response ); }*/
@@ -529,10 +552,8 @@ client.on('message', message => {
 		case "wikitest":
 			wikitest(command);
 			break;
-		
+
 		case "hungry?":
-			//response = "Always";
-			//if(command.pmUser){ message.author.send("Always"); } else { message.channel.send("Always"); }
 			sendMessage(command, "Always")
 			break;
 		
@@ -571,24 +592,38 @@ client.on('message', message => {
 			message.channel.send( "Heh, I'm ignoring you" );
 	                break;
 
-		case "arachnobot":
-			//message.channel.send("https://i.imgur.com/mzBdnXf.png");
-      sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
-      sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
-			break;
-
+    /* TB agnostic memes/material */
 		case "samatha":
-			sendMessage(command, "from <http://i.imgur.com/SLTB7vW.png>");
+		case "samantha":
+			sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
 			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 			break;
-	    
+    
+    /* TB1-specific cases */
+		case "arachnobot":
+			sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
+			sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+			break;
+
 		case "vh":
 		case "vengeful":
-      sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
-      sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
-			//message.channel.send("https://vignette3.wikia.nocookie.net/terrabattle/images/8/82/Capture_d%E2%80%99%C3%A9cran_2016-12-03_%C3%A0_17.34.25.png/revision/latest?cb=20161204121839");
+                        sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
+                        sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
 			break;
-			
+    
+    /* TB2-specific cases */
+
+		case "tb2":
+		case "tb2wiki":
+		case "wiki2":
+			tb2wiki(command);
+			break;
+	    
+		case "tb2elements":
+			sendMessage(command, "Terra Battle 2 elements chart");
+			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+			break;
+    
 		case "repo":
 			message.author.send("https://github.com/bokochaos/hisobot");
 			break;
@@ -598,13 +633,13 @@ client.on('message', message => {
 			//Ignore as if it wasn't a relevant message
 			break;
 
-    default:
+                default:
 			//Cases where it isn't a recognized command
 			//message.channel.send("What?\nRun that by me again.");
 			//response = "What?\nRun that by me again.";
 			sendMessage(command, "What?\nRun that by me again.");
 	}
-	
+
 	//send feedback depending on if pmFlag is raised.
 	//if(command.pmUser){ message.author.send(response); } else { message.channel.send(response); }
 	
@@ -727,6 +762,5 @@ client.on('message', message => {
 //             message.channel.send('Error');
 //         }
 //     });
-
 
 client.login( token );
