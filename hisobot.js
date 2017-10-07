@@ -86,6 +86,9 @@ function checkHoistRole(command){
 
 //send the output message depending on how the command was structured
 function sendMessage(command, messageText){
+    // console.log(sendMessage);
+    // console.log(command);
+    // console.log(command.message);
 	command.pmUser ? command.message.author.send(messageText) : command.message.channel.send(messageText);
 }
 
@@ -470,6 +473,13 @@ client.on('guildMemberAdd', member => {
 	);
 });
 
+function tb2wikilink(wiki, body){
+    var link = wiki;
+    if(body.includes("There were no results matching the query.")){
+	link = "Page not found";
+    }
+    return link;
+};
 
 // Search on wiki
 
@@ -482,17 +492,138 @@ function tb2wiki(command){
     	    console.log(error);
     	    throw error;
     	}
-	if(body.includes("There were no results matching the query.")){
-	    sendMessage(command, "Page not found");
-	} else {
-	    sendMessage(command, wiki);
-	}
+	sendMessage(command, tb2wikilink(wiki, body));	
     });
 };
 
+var commands = {};
+commands.shutdown = function(message){
+    onShutDown(message);
+};
+
+commands.role = function(message){
+    var command = commandJSO(message);
+    //response = manageRoles(command);
+    //manageRoles(command);
+    client.setTimeout(manageRoles, 1*1000, command);
+    /*if (Response.response == "failure"){
+      message.channel.send("This command only works in guild chats");
+      } else { message.channel.send( Response.response ); }*/
+    
+};
+commands.roles = commands.role;
+
+commands.wikitest = function(message){
+    wikitest(command);
+};
+
+commands.command = function(message){
+    var command = commandJSO(message);    
+    sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
+};
+
+commands.commands = commands.command;
+commands['-h'] = commands.command;
+commands.help = commands.command;
+commands['h'] = commands.command;
+
+
+commands.wiki = function(message){
+    var command = commandJSO(message);    
+    wikitest(command);
+};
+
+commands.wikia = commands.command;
+
+commands.hungry = function(message){
+    var command = commandJSO(message);    
+    sendMessage(command, "Always");
+}
+
+commands.mz = function(message){
+    var command = commandJSO(message);
+    metalZone(command);
+};
+
+commands.metal = commands.mz
+
+commands.name = function(message){
+    message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
+			 "pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
+    			 "HisoBot got the most votes.\nMy name is HisoBot.\n" + 
+			 "But feel free to call me Hisoguchi.");
+
+};
+
+commands.annoyed = function(message){
+    message.channel.send( "Heh, I'm ignoring you" );
+};
+
+commands.samatha = function(message){
+    var command = commandJSO(message);    
+    sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
+    sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
+};
+commands.samantha = commands.samatha;
+
+commands.arachnobot = function(message){
+    var command = commandJSO(message);        
+    sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
+    sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+};
+
+commands.vh = function(message){
+    var command = commandJSO(message);    
+    sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
+    sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
+};
+
+commands.vengeful = commands.vh;
+commands.vengefulhearts = commands.vh;
+
+commands.tb2 = function(message){
+    var command = commandJSO(message);
+    tb2wiki(command);
+};
+
+commands.tb2wiki = commands.tb2;
+commands.wiki2 = commands.tb2;
+
+commands.tb2elements = function(message){
+    var command = commandJSO(message);
+    sendMessage(command, "Terra Battle 2 elements chart");
+    sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+};
+
+commands.tb2elementsgraph = function(message){
+    var command = commandJSO(message);
+    sendMessage(command, "Terra Battle 2 elements graph");
+    sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));    
+};
+
+commands.repo = function(message){
+    var command = commandJSO(message);    
+    message.author.send("https://github.com/bokochaos/hisobot");
+};
+
+commandmap = {}
+for (key in commands){
+    if (commandmap.size == 0){
+	commandma[key] = commands[key];
+    } else {
+	add = true;
+	for (mapkey in commandmap){
+	    if (commands[key] == commandmap[mapkey]){
+		add = false;
+	    } 
+	}
+	if(add){
+	    commandmap[key] = commands[key];
+	}
+    }
+}
 
 client.on('message', message => {
-	
 	/*
 	 * Command = {
 	 *   task:    [task_name_string],
@@ -501,144 +632,42 @@ client.on('message', message => {
 	 *   pmFlag:  [pm_task_results]
 	 * }
 	 */
-  /*  if (message.author.username != "hisobot"){
-	//calls the method on the python object
-	//python.hello(message);
-    }
-
-    if (!message.author.bot){
-	var url = "mongodb://localhost:27017/terradb";
-
-	mongoClient.connect(url, function(error, db) {
-	    if (error) {
-		console.log(error);
-		throw error;
-	    }
-	    /*db.collection("users").insert({id: message.author.username,
-					   time: message.createdTimestamp,
-					   message: message.content
-					  }
-					 ).catch(function(error){
-					     console.log(error);
-					 });/
-	    python.mongo()
-	});
-    }*/
     
-	var command = commandJSO(message);
-	
-	//var response = "What?\nRun that by me again."; //Done to manage promise issues
-	switch(command.task){
-		case "shutdown":
-			onShutDown(message);
-			
-			//20 July 2017: Not sure if this message is reached.
-			//01 Aug 2017: Message is reached if the user does not have authorization. Thanks @Paddington for being the first person to test that.
-			//console.log("Shutdown test message");
-			
-			//20 July 2017: Is break ever reached if the process kills itself?
-			break;
-		
-		case "role":
-		case "roles":
-			//response = manageRoles(command);
-			//manageRoles(command);
-			client.setTimeout(manageRoles, 1*1000, command);
-			/*if (Response.response == "failure"){
-				message.channel.send("This command only works in guild chats");
-			} else { message.channel.send( Response.response ); }*/
-			break;
-		
-		case "wikitest":
-			wikitest(command);
-			break;
+    if (message.author.username != "hisobot"){
+//	python.hello(message);	
 
-		case "hungry?":
-			sendMessage(command, "Always")
-			break;
-		
-		/*case "feed":
-			message.channel.send( manageFeeding(command.details) );
-			break;*/
-		
-		case "command":
-		case "commands":
-		case "help":
-		case "-h":
-		case "h":
-			//message.channel.send("I hide the manual here <https://goo.gl/LYwrAF>");
-			sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
-			break;
-			
-		case "wiki":
-		case "wikia":
-			message.channel.send("Coming soon!");
-			break;
-		
-		case "mz":
-		case "metal":
-			metalZone(command);
-			//message.channel.send("Coming soon!");
-			break;
-		
-		case "name":
-			message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
-				"pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
-				"HisoBot got the most votes.\nMy name is HisoBot.\n" + 
-				"But feel free to call me Hisoguchi.");
-			break;
-		
-		case "annoyed":
-			message.channel.send( "Heh, I'm ignoring you" );
-	                break;
+	if (!message.author.bot){
+	    var url = "mongodb://localhost:27017/terradb";
 
-    /* TB agnostic memes/material */
-		case "samatha":
-		case "samantha":
-			sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
-			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
-			break;
-    
-    /* TB1-specific cases */
-		case "arachnobot":
-			sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
-			sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
-			break;
-
-		case "vh":
-		case "vengeful":
-                        sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
-                        sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
-			break;
-    
-    /* TB2-specific cases */
-
-		case "tb2":
-		case "tb2wiki":
-		case "wiki2":
-			tb2wiki(command);
-			break;
-	    
-		case "tb2elements":
-			sendMessage(command, "Terra Battle 2 elements chart");
-			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
-			break;
-    
-		case "repo":
-			message.author.send("https://github.com/bokochaos/hisobot");
-			break;
-		
-		case undefined:
-			//Cases where it isn't a command message
-			//Ignore as if it wasn't a relevant message
-			break;
-
-                default:
-			//Cases where it isn't a recognized command
-			//message.channel.send("What?\nRun that by me again.");
-			//response = "What?\nRun that by me again.";
-			sendMessage(command, "What?\nRun that by me again.");
+	    mongoClient.connect(url, function(error, db) {
+		if (error) {
+		    console.log(error);
+		    throw error;
+		}
+		/*db.collection("users").insert({id: message.author.username,
+		  time: message.createdTimestamp,
+		  message: message.content
+		  }
+		  ).catch(function(error){
+		  console.log(error);
+		  });/
+		  python.mongo() */
+	    });
 	}
+	var command = commandJSO(message);	
+	var complete = false;
+	var task = command.task;
+	if (task != undefined){
+	    value = commands[task]
+	    if (value != undefined){
+		value(message)
+	    } else{
+		sendMessage(command, "What?\nRun that by me again.");
+	    }
+	}
+    }
+});	    
+	// }
 
 	//send feedback depending on if pmFlag is raised.
 	//if(command.pmUser){ message.author.send(response); } else { message.channel.send(response); }
@@ -750,7 +779,7 @@ client.on('message', message => {
         //     }
         // })*/
 
-});
+
 
 // client.on('guildRole', guild =>{
 //     var args = message.content.split(/[ ]+/);
