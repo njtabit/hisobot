@@ -636,8 +636,93 @@ client.on('message', message => {
     if (message.author.username != "hisobot"){
 //	python.hello(message);	
 
-	if (!message.author.bot){
+	  if (!message.author.bot){
 	    var url = "mongodb://localhost:27017/terradb";
+
+		/*case "hungry?":
+			sendMessage(command, "Always")
+			break;
+		
+		/*case "feed":
+			message.channel.send( manageFeeding(command.details) );
+			break;*/
+		
+		/*case "command":
+		case "commands":
+		case "help":
+		case "-h":
+		case "h":
+			//message.channel.send("I hide the manual here <https://goo.gl/LYwrAF>");
+			sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
+			break;
+			
+		case "wiki":
+		case "wikia":
+			message.channel.send("Coming soon!");
+			break;
+		
+		case "mz":
+		case "metal":
+			metalZone(command);
+			//message.channel.send("Coming soon!");
+			break;
+		
+		case "name":
+			message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
+				"pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
+				"HisoBot got the most votes.\nMy name is HisoBot.\n" + 
+				"But feel free to call me Hisoguchi.");
+			break;
+		
+		case "annoyed":
+			message.channel.send( "Heh, I'm ignoring you" );
+	                break;
+
+    /* TB agnostic memes/material */
+		/*case "samatha":
+		case "samantha":
+			sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
+			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
+			break;
+    
+    /* TB1-specific cases */
+		/*case "arachnobot":
+			sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
+			sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
+			break;
+
+		case "vh":
+		case "vengeful":
+                        sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
+                        sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
+			break;
+    
+    /* TB2-specific cases */
+
+		/*case "tb2":
+		case "tb2wiki":
+		case "wiki2":
+			tb2wiki(command);
+			break;
+	    
+		case "tb2elements":
+			sendMessage(command, "Terra Battle 2 elements chart");
+			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
+			break;
+
+		case "tb2elementsgraph":
+			sendMessage(command, "Terra Battle 2 elements graph");
+			sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));
+			break;
+    
+		case "repo":
+			message.author.send("https://github.com/bokochaos/hisobot");
+			break;
+		
+		case undefined:
+			//Cases where it isn't a command message
+			//Ignore as if it wasn't a relevant message
+			break;*/
 
 	    mongoClient.connect(url, function(error, db) {
 		if (error) {
