@@ -21,5 +21,17 @@ module.exports = {
 	    }
 	    console.log(reply);
 	});
+    },
+
+    match_string: function(argument){
+	return new Promise(function(resolve, reject) {
+	    zerorpcClient.invoke("match_string", argument, function(error, reply, streaming) {
+		if(error){
+		    console.log("ERROR: ", error);
+		    reject(Error(error));
+		}
+		resolve(reply);
+	    });
+	});
     }
 }
