@@ -473,27 +473,18 @@ client.on('guildMemberAdd', member => {
 	);
 });
 
-function tb2wikilink(wiki, body){
-    var link = wiki;
-    if(body.includes("There were no results matching the query.")){
-	link = "Page not found";
-    }
-    return link;
-};
-
-// Search on wiki
-
 function tb2wiki(command){
-    argument = command.details;
-    argument = argument.split(" ").join("_");
-    var wiki = "https://terrabattle2.gamepedia.com/index.php?search=" + argument;
-    request(wiki, function(error, response, body) {
-    	if (error) {
-    	    console.log(error);
-    	    throw error;
-    	}
-	sendMessage(command, tb2wikilink(wiki, body));	
-    });
+
+    var wiki = "https://terrabattle2.gamepedia.com/index.php?search="
+    python.match_string(command.details).then(
+	function(best_match) {
+	    var join = best_match.split(" ").join("_");	    
+	    sendMessage(command, wiki+join);
+	},
+	function(error) {
+	    console.error("Failed!", error);
+	}
+    );
 };
 
 var commands = {};
