@@ -449,10 +449,6 @@ function metalZone(command){
 
 client.on('ready', () => {
   onStart();
-	
-  //console.log('Nazuna is online!');
-	//message.channel.send('I'm back!');
-  
 });
 
 
@@ -504,13 +500,44 @@ commands.role = function(message){
 };
 commands.roles = commands.role;
 
-commands.wikitest = function(message){
-    wikitest(command);
+commands.repo = function(message){
+    var command = commandJSO(message);    
+    message.author.send("https://github.com/bokochaos/hisobot");
 };
 
 commands.command = function(message){
-    var command = commandJSO(message);    
+    var command = commandJSO(message);
+    commandmap = {}
+
+    // Get all unique commands
+    for (key in commands){
+	if (commandmap.size == 0){
+	    commandmap[key] = commands[key];
+	} else {
+	    add = true;
+	    for (mapkey in commandmap){
+		if (commands[key] == commandmap[mapkey]){
+		    add = false;
+		} 
+	    }
+	    if(add){
+		commandmap[key] = commands[key];
+	    }
+	}
+    }
+
+    // Sort unique commands
+    commandlist = "";
+    Object.keys(commandmap)
+	.sort()
+	.forEach(function(key){
+	    commandlist += key + ", ";
+	});
+    commandlist = commandlist.slice(0, -2);
+    
     sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
+    sendMessage(command, "List of commands: ");
+    sendMessage(command, commandlist);
 };
 
 commands.commands = commands.command;
@@ -524,12 +551,45 @@ commands.wiki = function(message){
     wikitest(command);
 };
 
-commands.wikia = commands.command;
+commands.wikia = commands.wiki;
+
+commands.wikitest = function(message){
+    wikitest(command);
+};
 
 commands.hungry = function(message){
     var command = commandJSO(message);    
     sendMessage(command, "Always");
 }
+
+commands.name = function(message){
+    message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
+			 "pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
+    			 "HisoBot got the most votes.\nMy name is HisoBot.\n" + 
+			 "But feel free to call me Hisoguchi.");
+};
+
+commands.annoyed = function(message){
+    message.channel.send( "Heh, I'm ignoring you" );
+};
+
+// TB General
+commands.samatha = function(message){
+    var command = commandJSO(message);    
+    sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
+    sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
+};
+commands.samantha = commands.samatha;
+
+
+// TB1
+commands.tb1 = function(message){
+    var command = commandJSO(message);
+    wikitest(command);
+};
+
+commands.tb1wiki = commands.tb1;
+commands.wiki1 = commands.tb1;
 
 commands.mz = function(message){
     var command = commandJSO(message);
@@ -537,25 +597,6 @@ commands.mz = function(message){
 };
 
 commands.metal = commands.mz
-
-commands.name = function(message){
-    message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
-			 "pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
-    			 "HisoBot got the most votes.\nMy name is HisoBot.\n" + 
-			 "But feel free to call me Hisoguchi.");
-
-};
-
-commands.annoyed = function(message){
-    message.channel.send( "Heh, I'm ignoring you" );
-};
-
-commands.samatha = function(message){
-    var command = commandJSO(message);    
-    sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
-    sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
-};
-commands.samantha = commands.samatha;
 
 commands.arachnobot = function(message){
     var command = commandJSO(message);        
@@ -572,6 +613,8 @@ commands.vh = function(message){
 commands.vengeful = commands.vh;
 commands.vengefulhearts = commands.vh;
 
+
+// TB2
 commands.tb2 = function(message){
     var command = commandJSO(message);
     tb2wiki(command);
@@ -592,28 +635,6 @@ commands.tb2elementsgraph = function(message){
     sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));    
 };
 
-commands.repo = function(message){
-    var command = commandJSO(message);    
-    message.author.send("https://github.com/bokochaos/hisobot");
-};
-
-commandmap = {}
-for (key in commands){
-    if (commandmap.size == 0){
-	commandma[key] = commands[key];
-    } else {
-	add = true;
-	for (mapkey in commandmap){
-	    if (commands[key] == commandmap[mapkey]){
-		add = false;
-	    } 
-	}
-	if(add){
-	    commandmap[key] = commands[key];
-	}
-    }
-}
-
 client.on('message', message => {
 	/*
 	 * Command = {
@@ -629,91 +650,6 @@ client.on('message', message => {
 
 	  if (!message.author.bot){
 	    var url = "mongodb://localhost:27017/terradb";
-
-		/*case "hungry?":
-			sendMessage(command, "Always")
-			break;
-		
-		/*case "feed":
-			message.channel.send( manageFeeding(command.details) );
-			break;*/
-		
-		/*case "command":
-		case "commands":
-		case "help":
-		case "-h":
-		case "h":
-			//message.channel.send("I hide the manual here <https://goo.gl/LYwrAF>");
-			sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
-			break;
-			
-		case "wiki":
-		case "wikia":
-			message.channel.send("Coming soon!");
-			break;
-		
-		case "mz":
-		case "metal":
-			metalZone(command);
-			//message.channel.send("Coming soon!");
-			break;
-		
-		case "name":
-			message.channel.send("Boko asked for names.\nPeople sent in names.\n" +
-				"pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
-				"HisoBot got the most votes.\nMy name is HisoBot.\n" + 
-				"But feel free to call me Hisoguchi.");
-			break;
-		
-		case "annoyed":
-			message.channel.send( "Heh, I'm ignoring you" );
-	                break;
-
-    /* TB agnostic memes/material */
-		/*case "samatha":
-		case "samantha":
-			sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
-			sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
-			break;
-    
-    /* TB1-specific cases */
-		/*case "arachnobot":
-			sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
-			sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
-			break;
-
-		case "vh":
-		case "vengeful":
-                        sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
-                        sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
-			break;
-    
-    /* TB2-specific cases */
-
-		/*case "tb2":
-		case "tb2wiki":
-		case "wiki2":
-			tb2wiki(command);
-			break;
-	    
-		case "tb2elements":
-			sendMessage(command, "Terra Battle 2 elements chart");
-			sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
-			break;
-
-		case "tb2elementsgraph":
-			sendMessage(command, "Terra Battle 2 elements graph");
-			sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));
-			break;
-    
-		case "repo":
-			message.author.send("https://github.com/bokochaos/hisobot");
-			break;
-		
-		case undefined:
-			//Cases where it isn't a command message
-			//Ignore as if it wasn't a relevant message
-			break;*/
 
 	    mongoClient.connect(url, function(error, db) {
 		if (error) {
@@ -742,130 +678,6 @@ client.on('message', message => {
 	    }
 	}
     }
-});	    
-	// }
-
-	//send feedback depending on if pmFlag is raised.
-	//if(command.pmUser){ message.author.send(response); } else { message.channel.send(response); }
-	
-	//if(message.content == 'greens?'){ message.channel.send('Kweh (Please)'); }
-	
-	//if(message.content == '!feed greens'){ message.channel.send('Kweh? (food?)\n*eats greens*'); /*message.channel.send('*eats greens*');*/  }
-    
-	/*if(message.content == '!servers'){ 
-		message.channel.send("Kweh (lemme check)");
-		var servers = client.guilds; //returns a Collection of <Snowflake, Guild>
-		
-		//returns the number of guilds the bot is associated with
-		//message.channel.send(servers.size);
-		console.log("# of servers: " + servers.size);
-		
-		//log into the console the guild object (name) and its id
-		//JS maps return value before key
-		var iter = servers.forEach(
-			(v,k) => {console.log("name:",v.name,"id:", k);}
-		);
-		
-		
-		//for (s in servers.values()) {
-			//message.channel.send("Server id: " + s.id + " Server Name: " + s.name);
-			//console.log(s.name);
-		//}
-	}*/
-	
-	/*if(message.content == "!wikitest"){
-		var x = "";
-		request("http://terrabattle.wikia.com/wiki/Special:Search?search=Nazuna&fulltext=Search&format=json", function(error, response, body) {
-			//console.log(body);
-			message.channel.send("Kweh (Lemme check)");
-			x = JSON.parse(body); //x becomes an array of JSOs
-			var count = 0, response = "";
-			do{
-				var link_x = x[count];
-				response = response.concat("\t" + link_x.title + ": " + link_x.url + "\n");
-				++count;
-			} while (count < 5);
-			//console.log(x[0]); // print out the 0th JSO
-			message.channel.send(response);
-			
-			//message.channel.send(body); //Voids 2k character limit of Discord messages
-			//x = body;
-		});
-		//console.log(x);
-	}*/
-	
-	/*if(message.content == "!shutdown"){
-		onShutDown(message);
-	}*/
-	/*var args = message.content.split(/[ ]+/);
-    var i;
-    var longName = "";
-
-    if (commandIs("wiki", message)){
-        if (args.length === 1){
-            message.channel.send('What do you want to look for? ^^. Usage: `!wiki [search term]`');
-        } else if (args.length === 2){
-                if (args[1] === 'Mizell' || args[1 === 'mizell']){
-                    message.channel.send('Oh, it looks like you made a typo. Don\'t worry I got you! ^^ http://terrabattle.wikia.com/wiki/Nazuna');
-                } else {
-                    if (args[1].charAt(args[1].length-1) === '^') {
-                        
-                        args[1].slice(0,-1);
-                        message.channel.send('http://terrabattle.wikia.com/wiki/'+ args[1].charAt(0).toUpperCase()+args[1].slice(1,-1).toLowerCase()+'_Λ');
-                        
-                    } else {
-                    message.channel.send('http://terrabattle.wikia.com/wiki/'+ args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase());
-                }    
-            }
-        } else {
-                longName = args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()
-            for (i=2; i<args.length; i++){
-                longName += "_"+args[i].charAt(0).toUpperCase()+args[i].slice(1).toLowerCase();     
-                }
-              message.channel.send('http://terrabattle.wikia.com/wiki/'+ longName); 
-        }        
-    }
-    if (commandIs("recode", message)){
-        message.channel.send('http://terrabattle.wikia.com/wiki/'+ args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()+'_Λ');
-    }
-    if (commandIs("tbcompendium", message)){
-        message.channel.send('http://tbc.silverdb.it');
-    }
-    if (commandIs("tbstats", message)){
-        message.channel.send('http://tbs.desile.fr/#/quick-start');
-    }
-    if (commandIs("chapter", message)){
-        var chop ="";
-        chop = args[0].substring(1);    
-        message.channel.send('http://terrabattle.wikia.com/wiki/'+chop.charAt(0).toUpperCase()+chop.slice(1).toLowerCase()+'_'+args[1]+'#'+args[1]+'.'+args[2]);
-    }
-
-
-    if(commandIs("role", message)){
-        let role = message.guild.roles.find("name",'Owner');
-        let member = message.guild.member(message.author);
-        member.addRole (role).catch(console.error);
-    }
-        // client.on('guildRole', guild =>{
-        // if (args.length === 2){
-        //     message.channel.send('You got the role '+args[1]);
-        //     guild.member(message.author).addRole(args[1]).catch(Error => console.log(Error));    
-        //     } else {
-        //         message.channel.send('Error');
-        //     }
-        // })*/
-
-
-
-// client.on('guildRole', guild =>{
-//     var args = message.content.split(/[ ]+/);
-//         if (args.length === 2){
-//             message.channel.send('You got the role '+args[1]);
-//             guild.member(message.author).addRole(args[1]).catch(Error => console.log(Error));    
-              
-//         } else {
-//             message.channel.send('Error');
-//         }
-//     });
+});
 
 client.login( token );
