@@ -508,6 +508,8 @@ commands.repo = function(message){
 commands.command = function(message){
     var command = commandJSO(message);
     commandmap = {}
+
+    // Get all unique commands
     for (key in commands){
 	if (commandmap.size == 0){
 	    commandmap[key] = commands[key];
@@ -524,6 +526,7 @@ commands.command = function(message){
 	}
     }
 
+    // Sort unique commands
     commandlist = "";
     Object.keys(commandmap)
 	.sort()
@@ -531,9 +534,7 @@ commands.command = function(message){
 	    commandlist += key + ", ";
 	});
     commandlist = commandlist.slice(0, -2);
-    console.log(commandlist);
     
-
     sendMessage(command, "I hide the manual here <https://goo.gl/LYwrAF>");
     sendMessage(command, "List of commands: ");
     sendMessage(command, commandlist);
@@ -551,6 +552,7 @@ commands.wiki = function(message){
 };
 
 commands.wikia = commands.wiki;
+
 commands.wikitest = function(message){
     wikitest(command);
 };
@@ -565,7 +567,6 @@ commands.name = function(message){
 			 "pausetheequipment sent in HisoBot.\nPeople voted on those names.\n" + 
     			 "HisoBot got the most votes.\nMy name is HisoBot.\n" + 
 			 "But feel free to call me Hisoguchi.");
-
 };
 
 commands.annoyed = function(message){
@@ -573,7 +574,6 @@ commands.annoyed = function(message){
 };
 
 // TB General
-
 commands.samatha = function(message){
     var command = commandJSO(message);    
     sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
@@ -583,7 +583,6 @@ commands.samantha = commands.samatha;
 
 
 // TB1
-
 commands.tb1 = function(message){
     var command = commandJSO(message);
     wikitest(command);
