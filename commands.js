@@ -1,7 +1,9 @@
-var utils = require("./utils.js");
-var python = require("./python.js");
+const utils = require("./utils.js");
+const python = require("./python.js");
+const Discord = require("discord.js");
 //r/TB Discord role names and alterations
-var roleNames = require('./commands/role_maps');
+const roleNames = require('./commands/role_maps');
+const request = require('request');
 //TODO: make this into a DB system that allows for better name association management
 
 /* Metal Zone Tracker */
@@ -16,28 +18,36 @@ const IntervalAlerts = require("./commands/interval.js");
 var commands = {};
 exports.commands = commands;
 module.exports = {
-    parse: function(client, message){
-	var command = commandJSO(message);
-	var complete = false;
-	var task = command.task;
-	if (task != undefined){
-	    value = commands[task]
-	    if (value != undefined){
-		value(client, message)
-	    } else{
-		utils.sendMessage(command, "What?\nRun that by me again.");
-	    }
-	}
-    },
-
-    onStart: function(client){
-	console.log("Hisobot online!");
-	console.log(new Date());
-	
-	let now = new Date(), nextMinute = new Date();
-	nextMinute.setMilliseconds(0); nextMinute.setSeconds(0); nextMinute.setMinutes(nextMinute.getMinutes() +1);
-	client.setTimeout(alerts, nextMinute-now, client, MZSchedule, DQSchedule );
+  parse: function(client, message){
+    var command = commandJSO(client, message);
+    var complete = false;
+    var task = command.task;
+    if (task != undefined){
+      value = commands[task];
+      if (value != undefined){
+        value(client, message);
+      } else {
+      utils.sendMessage(command, "What?\nRun that by me again.");
+      }
     }
+  },
+
+  onStart: function(client){
+    //Clear client's timeouts and intervals to prevent repeat spamming of alerts
+    console.log("Time is: " + new Date());
+    console.log("Clearing out timeouts and intervals");
+    for (const t of client._timeouts) clearTimeout(t);
+    for (const i of client._intervals) clearInterval(i);
+    client._timeouts.clear();
+    client._intervals.clear();
+    //alert that the bot is online
+    console.log("Hisobot online!");
+    console.log(new Date());
+    
+    let now = new Date(), nextMinute = new Date();
+    nextMinute.setMilliseconds(0); nextMinute.setSeconds(0); nextMinute.setMinutes(nextMinute.getMinutes() +1);
+    client.setTimeout(alerts, nextMinute-now, client, MZSchedule, DQSchedule );
+  }
     
     
 };
@@ -45,6 +55,7 @@ module.exports = {
 //Shut down server (on emergency or for updates)
 function onShutDown(client, message){
     try{
+      const shutdown = {name: "ShutDownError", message: "Bot shutdown on user request"};
 	const permissions = message.member.permissions;
 	if ( permissions.has("KICK_MEMBERS") ){
 	    
@@ -56,7 +67,8 @@ function onShutDown(client, message){
 	    /*client.destroy((err) => {
               console.log(err);
 	      });*/
-	    console.log(customErrors.getShutDownError().message);
+	    //console.log(customErrors.getShutDownError().message);
+      console.log(shutdown.message);
 	    console.log("user: " + author.username + " id: " + author.id);
 	    console.log("server: " + server.name + " id: " + server.id);
 	    
@@ -80,10 +92,10 @@ commands.shutdown = function(client, message){
 };
 
 commands.role = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     //response = manageRoles(command);
     //manageRoles(command);
-    client.setTimeout(manageRoles, 1*1000, command);
+    client.setTimeout(manageRoles, 1*1000, command, client);
     /*if (Response.response == "failure"){
       message.channel.send("This command only works in guild chats");
       } else { message.channel.send( Response.response ); }*/
@@ -92,12 +104,12 @@ commands.role = function(client, message){
 commands.roles = commands.role;
 
 commands.repo = function(client, message){
-    var command = commandJSO(message);    
+    var command = commandJSO(client, message);    
     message.author.send("https://github.com/bokochaos/hisobot");
 };
 
 commands.command = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     commandmap = {}
 
     // Get all unique commands
@@ -138,7 +150,7 @@ commands['h'] = commands.command;
 
 
 commands.wiki = function(client, message){
-    var command = commandJSO(message);    
+    var command = commandJSO(client, message);    
     wikitest(command);
 };
 
@@ -149,7 +161,7 @@ commands.wikitest = function(client, message){
 };
 
 commands.hungry = function(client, message){
-    var command = commandJSO(message);    
+    var command = commandJSO(client, message);    
     sendMessage(command, "Always");
 }
 
@@ -166,7 +178,7 @@ commands.annoyed = function(client, message){
 
 // TB General
 commands.samatha = function(client, message){
-    var command = commandJSO(message);    
+    var command = commandJSO(client, message);    
     sendMessage(command, "Author: __Rexlent__\nSource: <https://www.pixiv.net/member_illust.php?mode=medium&illust_id=48388120>");
     sendMessage(command, new Discord.Attachment("./assets/samatha.png"));
 };
@@ -175,7 +187,7 @@ commands.samantha = commands.samatha;
 
 // TB1
 commands.tb1 = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     wikitest(command);
 };
 
@@ -183,20 +195,20 @@ commands.tb1wiki = commands.tb1;
 commands.wiki1 = commands.tb1;
 
 commands.mz = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     metalZone(command);
 };
 
 commands.metal = commands.mz
 
 commands.arachnobot = function(client, message){
-    var command = commandJSO(message);        
+    var command = commandJSO(client, message);        
     sendMessage(command, "Made by Rydia of TBF (TerraBattleForum)");
     sendMessage(command, new Discord.Attachment("./assets/arachnobot_tale.png"));
 };
 
 commands.vh = function(client, message){
-    var command = commandJSO(message);    
+    var command = commandJSO(client, message);    
     sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
     sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));
 };
@@ -207,7 +219,7 @@ commands.vengefulhearts = commands.vh;
 
 // TB2
 commands.tb2 = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     tb2wiki(command);
 };
 
@@ -215,19 +227,19 @@ commands.tb2wiki = commands.tb2;
 commands.wiki2 = commands.tb2;
 
 commands.tb2elements = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     sendMessage(command, "Terra Battle 2 elements chart");
     sendMessage(command, new Discord.Attachment("./assets/tb2_elements.png"));
 };
 
 commands.tb2elementsgraph = function(client, message){
-    var command = commandJSO(message);
+    var command = commandJSO(client, message);
     sendMessage(command, "Terra Battle 2 elements graph");
-    sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph"));    
+    sendMessage(command, new Discord.Attachment("./assets/tb2_elements_graph.png"));    
 };
 
 
-function commandJSO(msg){
+function commandJSO(client, msg){
 	//check if message actually is a command. If not, return a "no_task" JSO.
   //In the case of not having anything but a trigger, return an "annoyed" JSO
 	var msgContent = msg.content, msgContentLower = msg.content.toLowerCase();
@@ -475,7 +487,7 @@ function manageFeeding(details) {
 }
 
 //Add server roles to user based on command details
-function manageRoles(command){
+function manageRoles(command, client){
   try{
     const channel = command.message.channel, guild = client.guilds.find("name", "Terra Battle");
 

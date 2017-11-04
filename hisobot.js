@@ -142,4 +142,16 @@ client.on('message', message => {
     }
 });
 
+client.on('error', error => {
+  console.log('WebSocket error @ ' + new Date());
+  console.log(error);
+  client.destroy().then(() => client.login( token ));
+});
+
+client.on('disconnect', event => {
+  console.log('Disconnect code: ' + event.code);
+  console.log('reason: ' + event.reason);
+  client.destroy().then(() => client.login( token ));
+});
+
 client.login( token );
