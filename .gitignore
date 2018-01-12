@@ -45,6 +45,7 @@ Temporary Items
 # (Personal) data files
 hisobot extras
 constants/token.js
+auth
 
 #Excessive Node.JS files that should be installed via README
 node_modules
