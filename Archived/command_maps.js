@@ -18,36 +18,36 @@
 var cmdNames = new Map();
 const cmdStrings = ["metal.js", "role.js", "wikitest.js", "hungry.js", "help.js", "annoyed.js", "arachnobot.js", "vh.js", "repo.js", "name.js", "shutdown.js"];
 
-roleNames.set("metal", "metal.js");
-roleNames.set("mz", "metal.js");
+cmdNames.set("metal", "metal.js");
+cmdNames.set("mz", "metal.js");
 
-roleNames.set("role", "role.js");
-roleNames.set("roles", "role.js");
+cmdNames.set("role", "role.js");
+cmdNames.set("roles", "role.js");
 
-roleNames.set("wikitest", "wikitest.js");
+cmdNames.set("wikitest", "wikitest.js");
 
-roleNames.set("hungry?", "hungry.js");
+cmdNames.set("hungry?", "hungry.js");
 
-roleNames.set("help", "help.js");
-roleNames.set("h", "help.js");
-roleNames.set("-h", "help.js");
-roleNames.set("command", "help.js");
-roleNames.set("commands", "help.js");
+cmdNames.set("help", "help.js");
+cmdNames.set("h", "help.js");
+cmdNames.set("-h", "help.js");
+cmdNames.set("command", "help.js");
+cmdNames.set("commands", "help.js");
 
-roleNames.set("annoyed", "annoyed.js");
+cmdNames.set("annoyed", "annoyed.js");
 
-roleNames.set("arachnobot", "arachnobot.js");
+cmdNames.set("arachnobot", "arachnobot.js");
 
-roleNames.set("vh", "vh.js");
-roleNames.set("vengeful", "vh.js");
+cmdNames.set("vh", "vh.js");
+cmdNames.set("vengeful", "vh.js");
 
-roleNames.set("repo", "repo.js");
+cmdNames.set("repo", "repo.js");
 
-roleNames.set("name", "name.js");
+cmdNames.set("name", "name.js");
 
-roleNames.set("shutdown", "shutdown.js");
+cmdNames.set("shutdown", "shutdown.js");
 
-roleNames.set("reload", "reload.js");
+cmdNames.set("reload", "reload.js");
 
 
-exports.roleNames = roleNames;
+exports.cmdNames = cmdNames;

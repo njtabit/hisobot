@@ -1,13 +1,14 @@
 /**
  * Created:				  06 Sep 2017
- * Last updated:		15 Sep 2017
+ * Last updated:		10 Jan 2018
  * Developer(s):		CodedLotus
  * Description:			Returns the current TB1 Daily Quest. Initial Schedule came from https://terrabattleforum.com/threads/medieval-battle-4-4-0-update.11929/
- * Version #:			  1.0.1
+ * Version #:			  1.0.2
  * Version Details:
 		0.0.0: File created from cloning MZTable.js file
 		1.0.0: Created base Daily Quest Map, daily quest access functions, and time remaining access functions
     1.0.1: Added class variables to help organize time calculations easier
+    1.0.2: Found timeRemaining(one param) isn't functioning, and fixed a major/minor error of timeRemaining(2 param) has an error in calculating "tomorrow"
  */
 
 /**
@@ -98,7 +99,7 @@ class DQTable {
 	}
   
   timeRemaining(dTod, timeObject = false) {
-		var dTom = new Date(new Date().toUTCString());
+		var dTom = new Date(dTod);
 		dTom.setDate(dTom.getDate() + 1); dTom.setUTCHours(0); dTom.setUTCMinutes(0); dTom.setUTCSeconds(0); dTom.setUTCMilliseconds(0);
 		var baseDeltaH = Math.floor( (dTom - dTod) / (this._HOUR_IN_MS) );
 		var baseDeltaM = Math.round( (dTom - dTod - baseDeltaH * this._HOUR_IN_MS) / (this._MIN_IN_MS) );

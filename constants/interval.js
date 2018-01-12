@@ -1,34 +1,56 @@
 /*
  * Created:				  13 Sept 2017
- * Last updated:		15 Sept 2017
+ * Last updated:		12 Jan 2018
  * Developer(s):		CodedLotus
- * Description:			Returns the inverval function for the bot
- * Version #:			  1.1.0
+ * Description:			Returns the interval function for the bot
+ * Version #:			  1.1.2
  * Version Details:
 		1.0.0: document created with frequently experimented functions
 		1.1.0: Changed function parameters, function trigger conditions, and moved down essential const variables to base level functions
+    1.1.1: Added "critical alerts" for specific DQs, as well as changes made for accommodating the new MZ Schedule calculator.
+    1.1.2: Fixes made in response to some faults between the interval alerts and MZ Schedule calculator. (Hourly alerts were early by an hour)
  */
 
 //var MZSchedule = require("./MZTable");
 //var DQSchedule = require("./DQTable"); 
 
+const RichEmbed = require('discord.js').RichEmbed;
 
-function TBmidHourAlerts(time, DQSchedule, MZSchedule){  
+const CRITICAL_DQ_LIST = ["Lucky Orbling", "Sweet Temptation", "Tropical Haze"];
+
+function TBmidHourAlerts(time, client, DQSchedule, MZSchedule){  
   //Calculated functionals
   const openLeft = '{}{} has {} {} left', openNowIn = '{} is live{}', 
         ZERO = 0, MIN_LEFT = 60-time.getMinutes();
   
   //Open Metal Zone and Daily Quest calculations
   const openZones = MZSchedule.getOpenZones(time);
-  const mz6       = MZSchedule.getSpecificZoneSchedule(6, false),
-        mz7       = MZSchedule.getSpecificZoneSchedule(7, false);
-  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
+  const mz6       = MZSchedule.getSpecificZoneSchedule(6, false, time),
+        mz7       = MZSchedule.getSpecificZoneSchedule(7, false, time);
+  const tUntilM6  = mz6.openZoneSchedule, tUntilM6A = mz6.openAHTKSchedule,
+        tUntilM7  = mz7.openZoneSchedule, tUntilM7A = mz7.openAHTKSchedule,
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);
+  
+  /*const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
         tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule, time),
         tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule, time),
         tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule, time),
-        tLeftInDQ = DQSchedule.timeRemaining(time, true);
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);*/
   
   var output = "";
+  
+  if(CRITICAL_DQ_LIST.some(x => tLeftInDQ.quest == x) 
+    && tLeftInDQ.hours == ZERO){
+    //const CRITICAL_DQ_STRING = "Hey ya hermits! Get out of your closet forests because " + tLeftInDQ.quest + " is up now!";
+    const CRITICAL_DQ_EMBED = new RichEmbed()
+            .setTitle("DAILY QUEST UPDATE!!!")
+            .addField("Hey ya hermits!","Get out of your closet forests because " + tLeftInDQ.quest + " is closing now!")
+            .setColor([255, 0, 0])
+            .setFooter("Thanks SethCypher#2016!", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
+            .setTimestamp();
+    const tb1General = client.channels.find("name", "tb1-general");
+    tb1General.send(CRITICAL_DQ_EMBED);
+  }
   
   //Daily Quest Alert
   output += (tLeftInDQ.hours == ZERO ? openLeft.format( "Daily Quest ", tLeftInDQ.quest, MIN_LEFT, "min" ) + "\n" : "" );
@@ -53,22 +75,42 @@ function TBmidHourAlerts(time, DQSchedule, MZSchedule){
   return output;
 } //End of TBmidHourAlerts
 
-function TBonHourAlerts(time, DQSchedule, MZSchedule){  
+function TBonHourAlerts(time, client, DQSchedule, MZSchedule){  
   //Calculated functionals
   const openLeft = '{}{} has {} {} left', openNowIn = '{} is live{}';
   const MZ_HOUR_THRESHOLDS = [1,3,5], ZERO = 0, DQ_SPACER = 4;
   
   //Open Metal Zone and Daily Quest calculations
   const openZones = MZSchedule.getOpenZones(time);
-  const mz6       = MZSchedule.getSpecificZoneSchedule(6, false),
-        mz7       = MZSchedule.getSpecificZoneSchedule(7, false);
-  const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
+  const mz6       = MZSchedule.getSpecificZoneSchedule(6, false, time),
+        mz7       = MZSchedule.getSpecificZoneSchedule(7, false, time);
+  const tUntilM6  = mz6.openZoneSchedule, tUntilM6A = mz6.openAHTKSchedule,
+        tUntilM7  = mz7.openZoneSchedule, tUntilM7A = mz7.openAHTKSchedule,
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);
+  
+  console.log(mz6);
+  console.log(mz7);
+  
+  /*const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
         tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule, time),
         tUntilM7  = MZSchedule.timeRemaining(mz7.openZoneSchedule, time),
         tUntilM7A = MZSchedule.timeRemaining(mz7.openAHTKSchedule, time),
-        tLeftInDQ = DQSchedule.timeRemaining(time, true);
+        tLeftInDQ = DQSchedule.timeRemaining(time, true);*/
   
   var output = "";
+  
+  if(CRITICAL_DQ_LIST.some(x => tLeftInDQ.quest == x) 
+    && [24, 4, 1].some(x => tLeftInDQ.hours)){
+    //const CRITICAL_DQ_STRING = "Hey ya hermits! Get out of your closet forests because " + tLeftInDQ.quest + " is up now!";
+    const CRITICAL_DQ_EMBED = new RichEmbed()
+            .setTitle("DAILY QUEST UPDATE!!!")
+            .addField("Hey ya hermits!","Get out of your closet forests because " + tLeftInDQ.quest + " is up now!")
+            .setColor([255, 0, 0])
+            .setFooter("Thanks SethCypher#2016!", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
+            .setTimestamp();
+    const tb1General = client.channels.find("name", "tb1-general");
+    tb1General.send(CRITICAL_DQ_EMBED);
+  }
   
   //Daily Quest Alert
   output += ( (tLeftInDQ.hours%DQ_SPACER == ZERO || tLeftInDQ.hours == MZ_HOUR_THRESHOLDS[ZERO]) 
@@ -110,22 +152,23 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
     //Order: Daily Quest -> MZ Closing -> MZ Opening
     if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 ){
       console.log("time is: " + time.toUTCString());
-      alertString = TBmidHourAlerts(time, DQSchedule, MZSchedule);
+      alertString = TBmidHourAlerts(time, client, DQSchedule, MZSchedule);
     }//End of Immediacy Alerts
     
     //On-the-hour Alerts
     else if(time.getMinutes() == ZERO){
       console.log("time is: " + time.toUTCString());
-      alertString = TBonHourAlerts(time, DQSchedule, MZSchedule);
+      alertString = TBonHourAlerts(time, client, DQSchedule, MZSchedule);
     }//End of On-the-hour Alerts
     
     if (alertString.length > 0){
-	const tb1General = client.channels.find("name", "tb1-bot-alerts");
-	if (tb1General != null){
-	    tb1General.send(alertString);
-	} else {
-	    console.log("tb1General was null");
-	}
+      //const tb1General = client.channels.find("name", "tb1-bot-alerts");
+      const tb1General = client.channels.find("name", "tb1-bot-alerts");
+      if (tb1General != null){
+          tb1General.send(alertString);
+      } else {
+          console.log("tb1General was null");
+      }
     }
   }
 }
