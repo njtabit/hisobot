@@ -18,11 +18,11 @@ module.exports = class SamathaCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'samatha',
-            aliases: ['samantha'],
+            aliases: ['sam','samantha'],
             group: 'general',
             memberName: 'samatha',
             description: 'You know. ( ͡° ͜ʖ ͡°)',
-            examples: ['Samatha', 'Samantha'],
+            examples: ['Samatha', 'Samantha','sam'],
             throttling: {
               usages: 2,
               duration: 30

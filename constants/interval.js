@@ -1,14 +1,15 @@
 /*
  * Created:				  13 Sept 2017
- * Last updated:		12 Jan 2018
+ * Last updated:		20 Jan 2018
  * Developer(s):		CodedLotus
  * Description:			Returns the interval function for the bot
- * Version #:			  1.1.2
+ * Version #:			  1.1.3
  * Version Details:
 		1.0.0: document created with frequently experimented functions
 		1.1.0: Changed function parameters, function trigger conditions, and moved down essential const variables to base level functions
     1.1.1: Added "critical alerts" for specific DQs, as well as changes made for accommodating the new MZ Schedule calculator.
     1.1.2: Fixes made in response to some faults between the interval alerts and MZ Schedule calculator. (Hourly alerts were early by an hour)
+    1.1.3: Changed certain array search (using .includes over .some)
  */
 
 //var MZSchedule = require("./MZTable");
@@ -39,12 +40,13 @@ function TBmidHourAlerts(time, client, DQSchedule, MZSchedule){
   
   var output = "";
   
-  if(CRITICAL_DQ_LIST.some(x => tLeftInDQ.quest == x) 
+  if(CRITICAL_DQ_LIST.includes(tLeftInDQ.quest) 
     && tLeftInDQ.hours == ZERO){
     //const CRITICAL_DQ_STRING = "Hey ya hermits! Get out of your closet forests because " + tLeftInDQ.quest + " is up now!";
     const CRITICAL_DQ_EMBED = new RichEmbed()
             .setTitle("DAILY QUEST UPDATE!!!")
-            .addField("Hey ya hermits!","Get out of your closet forests because " + tLeftInDQ.quest + " is closing now!")
+    .addField("Hey ya hermits!",`Get out of your closet forests because ${tLeftInDQ.quest} is closing now!`)
+            .addField("Time left", `${MIN_LEFT} min`)
             .setColor([255, 0, 0])
             .setFooter("Thanks SethCypher#2016!", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
             .setTimestamp();
@@ -64,11 +66,11 @@ function TBmidHourAlerts(time, client, DQSchedule, MZSchedule){
   //MZ 6/7 Opening Alert
   //It is vital to check if the days == 0 since it would leave players thinking it will open soon.
   output += ( (tUntilM7A.hours == ZERO && tUntilM7A.days == ZERO ) 
-    ? openNowIn.format( "MZ7 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
+    ? openNowIn.format( "MZ7 AHTK", ` in ${MIN_LEFT} min` ) + "\n" : "" );
   output += ( (tUntilM6A.hours == ZERO && tUntilM6A.days == ZERO ) 
-    ? openNowIn.format( "MZ6 AHTK", " in " + MIN_LEFT + " min" ) + "\n" : "" );
-  output += (tUntilM7.hours  == ZERO ? openNowIn.format( "MZ7",      " in " + MIN_LEFT + " min" ) + "\n" : "" );
-  output += (tUntilM6.hours  == ZERO ? openNowIn.format( "MZ6",      " in " + MIN_LEFT + " min" ) + "\n" : "" );
+    ? openNowIn.format( "MZ6 AHTK", ` in ${MIN_LEFT} min` ) + "\n" : "" );
+  output += (tUntilM7.hours  == ZERO ? openNowIn.format( "MZ7",  ` in ${MIN_LEFT} min` ) + "\n" : "" );
+  output += (tUntilM6.hours  == ZERO ? openNowIn.format( "MZ6", ` in " ${MIN_LEFT} min` ) + "\n" : "" );
   
   //console.log("test print: " + output);
   
@@ -88,8 +90,8 @@ function TBonHourAlerts(time, client, DQSchedule, MZSchedule){
         tUntilM7  = mz7.openZoneSchedule, tUntilM7A = mz7.openAHTKSchedule,
         tLeftInDQ = DQSchedule.timeRemaining(time, true);
   
-  console.log(mz6);
-  console.log(mz7);
+  //console.log(mz6);
+  //console.log(mz7);
   
   /*const tUntilM6  = MZSchedule.timeRemaining(mz6.openZoneSchedule, time),
         tUntilM6A = MZSchedule.timeRemaining(mz6.openAHTKSchedule, time),
@@ -99,12 +101,13 @@ function TBonHourAlerts(time, client, DQSchedule, MZSchedule){
   
   var output = "";
   
-  if(CRITICAL_DQ_LIST.some(x => tLeftInDQ.quest == x) 
-    && [24, 4, 1].some(x => tLeftInDQ.hours)){
+  if( CRITICAL_DQ_LIST.includes(tLeftInDQ.quest) 
+         && [24, 12, 8, 4, 1].includes(tLeftInDQ.hours) ){
     //const CRITICAL_DQ_STRING = "Hey ya hermits! Get out of your closet forests because " + tLeftInDQ.quest + " is up now!";
     const CRITICAL_DQ_EMBED = new RichEmbed()
             .setTitle("DAILY QUEST UPDATE!!!")
-            .addField("Hey ya hermits!","Get out of your closet forests because " + tLeftInDQ.quest + " is up now!")
+            .addField("Hey ya hermits!",`Get out of your pocket forests because ${tLeftInDQ.quest} is up now!`)
+            .addField("Time left", `${tLeftInDQ.hours} hour${tLeftInDQ.hours>1?'s':''}`)
             .setColor([255, 0, 0])
             .setFooter("Thanks SethCypher#2016!", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
             .setTimestamp();
@@ -114,7 +117,7 @@ function TBonHourAlerts(time, client, DQSchedule, MZSchedule){
   
   //Daily Quest Alert
   output += ( (tLeftInDQ.hours%DQ_SPACER == ZERO || tLeftInDQ.hours == MZ_HOUR_THRESHOLDS[ZERO]) 
-    ? openLeft.format( "Daily Quest ", tLeftInDQ.quest, tLeftInDQ.hours, "hour(s)" ) + "\n" : "" );
+    ? openLeft.format( "Daily Quest ", tLeftInDQ.quest, tLeftInDQ.hours, `hour${(tLeftInDQ.hours>1)?'s':''}` ) + "\n" : "" );
   
   //MZ 6/7 (AHTK) Live Alert
   output += (openZones[6] > MZSchedule._STAT_CLOSE 
@@ -124,14 +127,14 @@ function TBonHourAlerts(time, client, DQSchedule, MZSchedule){
   
   //MZ 6/7 Opening Alert
   //Makes sure that AHTK MZs don't just look at hours, but also makes sure it will happen the same day.
-  output += ( (tUntilM7A.days == ZERO && MZ_HOUR_THRESHOLDS.indexOf(tUntilM7A.hours) > -1) 
-    ? openNowIn.format( "MZ7 AHTK", " in " + tUntilM7A.hours + " hour(s)" ) + "\n" : "" );
-  output += ( (tUntilM6A.days == ZERO && MZ_HOUR_THRESHOLDS.indexOf(tUntilM6A.hours) > -1) 
-    ? openNowIn.format( "MZ6 AHTK", " in " + tUntilM6A.hours + " hour(s)" ) + "\n" : "" );
-  output += (MZ_HOUR_THRESHOLDS.indexOf(tUntilM7.hours)  > -1 
-    ? openNowIn.format( "MZ7",      " in " + tUntilM7.hours  + " hour(s)" ) + "\n" : "" );
-  output += (MZ_HOUR_THRESHOLDS.indexOf(tUntilM6.hours)  > -1 
-    ? openNowIn.format( "MZ6",      " in " + tUntilM6.hours  + " hour(s)" ) + "\n" : "" );
+  output += ( (tUntilM7A.days == ZERO && MZ_HOUR_THRESHOLDS.includes(tUntilM7A.hours) ) 
+    ? openNowIn.format( "MZ7 AHTK", ` in ${tUntilM7A.hours} hour${tUntilM7A.hours>1?'s':''}` ) + "\n" : "" );
+  output += ( (tUntilM6A.days == ZERO && MZ_HOUR_THRESHOLDS.includes(tUntilM6A.hours)) 
+    ? openNowIn.format( "MZ6 AHTK", ` in ${tUntilM6A.hours} hour${tUntilM6A.hours>1?'s':''}` ) + "\n" : "" );
+  output += (MZ_HOUR_THRESHOLDS.includes(tUntilM7.hours) 
+    ? openNowIn.format( "MZ7",      ` in ${tUntilM7.hours} hour${tUntilM7.hours>1?'s':''}` ) + "\n" : "" );
+  output += (MZ_HOUR_THRESHOLDS.includes(tUntilM6.hours) 
+    ? openNowIn.format( "MZ6",      ` in ${tUntilM6.hours} hour${tUntilM6.hours>1?'s':''}` ) + "\n" : "" );
 
   //console.log("test print: " + output);
   
@@ -144,20 +147,22 @@ function TB1Alerts(time, client, MZSchedule, DQSchedule){
   //Daily Quest: Every 4 hours, last hour, 30 minutes, 10 minutes
   const MIN_THRESHOLDS = [30, 50], ZERO = 0;
 	
-  if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 || time.getMinutes() == ZERO ){
+  //if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 || time.getMinutes() == ZERO ){
+  if( MIN_THRESHOLDS.includes(time.getMinutes()) || time.getMinutes() == ZERO ){
 		var alertString = "";
 		
     //Immediacy Alerts
     //(30 and 10) minutes left check
     //Order: Daily Quest -> MZ Closing -> MZ Opening
-    if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 ){
-      console.log("time is: " + time.toUTCString());
+    //if( MIN_THRESHOLDS.indexOf(time.getMinutes()) > -1 ){
+    if( MIN_THRESHOLDS.includes(time.getMinutes()) ){
+      console.log(`time is: ${time.toUTCString()}`);
       alertString = TBmidHourAlerts(time, client, DQSchedule, MZSchedule);
     }//End of Immediacy Alerts
     
     //On-the-hour Alerts
     else if(time.getMinutes() == ZERO){
-      console.log("time is: " + time.toUTCString());
+      console.log(`time is: ${time.toUTCString()}`);
       alertString = TBonHourAlerts(time, client, DQSchedule, MZSchedule);
     }//End of On-the-hour Alerts
     

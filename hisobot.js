@@ -1,6 +1,6 @@
 /*
  * Created:				  02 Jan 2018
- * Last updated:		10 Jan 2018
+ * Last updated:		01 Feb 2018
  * Developer(s):		CodedLotus
  * Description:			Core details and functions of Hisobot
  * Version #:			  2.0.0
@@ -22,6 +22,7 @@
     1.1.0: Added interval-based alerts for Hisobot to send out.
     1.1.1: Changed some requires in accord with their module export changes.
     2.0.0: Changed core API to Discord.JS-Commando
+    2.1.0: Added JS String templating (included with the TBxRoll add, tb1dq add, Interval bug fix as  2.1.0)
  * fork sourcecode:		https://github.com/danielmilian90/Nazuna
  * loaned code:       https://dragonfire535.gitbooks.io/discord-js-commando-beginners-guide/content/making-your-first-command.html
  */
@@ -85,7 +86,7 @@ const thankYou     = [ "thank you", "thanks"],
 
 //Praise LordYamcha
 function PraiseYamcha(message, msgContentLower) {
-  if( praiseYamcha.some( x => msgContentLower == x ) ){
+  if( praiseYamcha.includes( msgContentLower ) ){
     //Because why not
     message.channel.send("Good, I don't need the Dragon Balls pulled out of storage.");
   }
@@ -97,9 +98,9 @@ function ThanksHisobot(message, msgContentLower) {
       ? msgContentLower.slice("thank you".length).trim()
       : msgContentLower.slice("thanks".length).trim() );
     
-    if( hisoNames.some( x => msgContentLower == x ) ){
+    if( hisoNames.includes( msgContentLower ) ){
       const goodjob = client.emojis.find("name", "goodjob"), love = client.emojis.find("name", "love");
-      msg.react(goodjob); msg.react(love);
+      message.react(goodjob); message.react(love);
     }
   }
 }
@@ -112,9 +113,9 @@ function SorryHisobot(message, msgContentLower){
           ? msgContentLower.slice("im sorry".length).trim()
           : msgContentLower.slice("i'm sorry".length).trim() ) );
     
-    if( hisoNames.some( x => msgContentLower == x ) ){
+    if( hisoNames.includes( msgContentLower ) ){
       const love = client.emojis.find("name", "love");
-      msg.react(love);
+      message.react(love);
     }
   }
 }
@@ -182,11 +183,13 @@ client.on('guildMemberAdd', member => {
 	//if (!channel) return;
 	// Send the message, mentioning the member
 	member.send(
-		"Hi there, it seems like you are a new member. Welcome to the Discord!\n" +
-		"My name is Hisobot, but you can call me Hisoguchi if you like.\n" +
-		"If you are playing Terra Battle, please type `!role Terra Battle`. "+
-		"If you are playing Terra Battle 2, please type `!role Terra Battle 2`. "+
-		"If you are playing both, please type `!role Terra Battle, Terra Battle 2`."
+		`Hi there, it seems like you are a new member. Welcome to the Discord!
+My name is Hisoguchi, but you can call me Hisobot if you like.
+If you are playing Terra Battle, please type \`!role Terra Battle\`.
+If you are playing Terra Battle 2, please type \`!role Terra Battle 2\`.
+If you are playing both, please type \`!role Terra Battle, Terra Battle 2\`.
+For more resources and commands, I suggest \`!help\`, and \`!help <specific command name here>\` for more specific details.
+See you around! Don't hesitate to ask questions. We have tons of answers~!`
 	);
 });
 

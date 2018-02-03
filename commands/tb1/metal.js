@@ -51,24 +51,24 @@ module.exports = class MetalAlertCommand extends Command {
     }
 
     run(msg, args) {
-      var MZ_EMBED = this.metalZone(args.zone);
+      var MZ_EMBED = this._metalZone(args.zone);
       return msg.embed(MZ_EMBED);
     }
     
     //reduce content somehow
-    metalZone(zone){
+    _metalZone(zone){
       const MZSchedule = this.client.MZSchedule;
       var MZ_EMBED = new RichEmbed()
             .setTitle("Metal Zone Schedule")
             .setDescription("Times are in D:HH:MM (Stamina recovery) format")
             .setURL("http://crape.org/tools/terra-battle/mz.html")
             .setColor([0, 0, 255])
-            .setFooter("This is a lot beefier than before...", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
+            .setFooter("FYI: Non-AHTK open every 6-7 hours.", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
             .setThumbnail("https://vignette.wikia.nocookie.net/terrabattle/images/1/16/Golden_Runner.png/revision/latest?cb=20150701095945")
             .setTimestamp();
       
       if (!zone) {
-        futureMZSchedule = MZSchedule.getNextZoneSchedule();
+        var futureMZSchedule = MZSchedule.getNextZoneSchedule();
         var currentMZSchedule = MZSchedule.getOpenZones(new Date()), openNow = "";
         for (var zoneNum = 0; zoneNum < MZSchedule._MAX_ZONE; ++zoneNum){
           if(currentMZSchedule[zoneNum] > 0){

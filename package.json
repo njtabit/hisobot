@@ -1,6 +1,6 @@
 {
   "name": "hisobot",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Bot designed for partial use with /r/TerraBattle's Discord",
   "main": "hisobot.js",
   "scripts": {

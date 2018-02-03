@@ -38,9 +38,9 @@ roleNames.set("vet", roleStrings[3]);*/
 roleNames.set("tbf", roleStrings[4]);
 roleNames.set("forum", roleStrings[4]);
 
-roleNames.set("tb2 coop", roleStrings[1]);
-roleNames.set("coop", roleStrings[1]);
-roleNames.set("tb2 co-op", roleStrings[1]);
+roleNames.set("tb2 coop", roleStrings[5]);
+roleNames.set("coop", roleStrings[5]);
+roleNames.set("tb2 co-op", roleStrings[5]);
 
 
 

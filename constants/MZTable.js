@@ -1,9 +1,9 @@
 /**
  * Created:				  11 Aug 2017
- * Last updated:		11 Jan 2018
+ * Last updated:		20 Jan 2018
  * Developer(s):		CodedLotus
  * Description:			Returns details of the TB1 Metal Zone. Initial Function code came from crape.org/tools/terra-battle/mz.html
- * Version #:			  1.4.1
+ * Version #:			  1.4.2
  * Version Details:
 		0.0.0: File created from cloning token.js file
 		1.0.0: Basic on-the-hour MZ schedule available
@@ -16,6 +16,7 @@
     1.3.2: Replaced some manual time calculations with class constants.
     1.4.0: Cleaned up some documentation/comments + Stamina Recharge integration on MZ info returns; added MZTimeResources
     1.4.1: Added the regular "0:" days to AHTK times (as per Azure's suggestion) 
+    1.4.2: Regularized "D:HH:MM" time formats between both schedule types (mass suggestion integration) 
  * Functional sourcecode:	https://crape.org/tools/terra-battle/mz.html
  */
 
@@ -90,7 +91,8 @@ class MZTable {
 	 * Initializing function that creates the 2-D array with timings for the class.
 	 */
 	_createTimetable() {
-	  // 通常OPEN
+	  //createTimeTable() function from crape.org
+    // 通常OPEN
 	  for (var i = 0; i < 10; ++i) {
 		var ary = [];
 		for (var j = 0; j < this._24; ++j) {
@@ -140,9 +142,7 @@ class MZTable {
 	 */
 	datestringMaker(date, isAHTK = false) {
 		var dateNow = new Date();
-		var baseDeltaD = Math.floor(
-			(date - dateNow) / (this._DAY_IN_MS)
-		);
+		var baseDeltaD = Math.floor( (date - dateNow) / (this._DAY_IN_MS) );
 		var baseDeltaH = Math.floor(
 			(date - dateNow - baseDeltaD * this._DAY_IN_MS) / (this._HOUR_IN_MS)
 		);
@@ -257,7 +257,7 @@ class MZTable {
 				else if ( openZoneCounter > 0 
 					&& typeof openZones[zone] === 'undefined' 
 					&& openNow[zone] == this._STAT_OPEN ){
-						openZones[zone] = this.MZTimeResources(movingDate, dateNow);
+						openZones[zone] = this.MZTimeResources(movingDate, dateNow, true);
 						//openZones[zone] = this._datestringMaker(movingDate);
 						--openZoneCounter;
 				}
@@ -313,7 +313,7 @@ class MZTable {
 				&& openNow == this._STAT_OPEN ){
 					//console.log("Base moving date: " + movingDate);
 					//console.log("format ?: :" + (format ? this._datestringMaker(movingDate, true) : movingDate));
-					openZone = this.MZTimeResources(movingDate, dateNow);
+					openZone = this.MZTimeResources(movingDate, dateNow, true);
 					//openZone = this._datestringMaker(movingDate);
 					--openZoneCounter;
 			}
