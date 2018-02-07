@@ -61,7 +61,7 @@ module.exports = class RoleCommand extends Command {
 
         const openRoles = tbRoles.openRoles, voidRoles = tbRoles.voidRoles;
         const guildRoles = guild.roles;
-        var guildMember = guild.members.get(msg.author.id);
+        var guildMember = guild.fetchMember(msg.author);
         
         var feedback = "";
         

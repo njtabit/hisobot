@@ -70,7 +70,7 @@ function TBmidHourAlerts(time, client, DQSchedule, MZSchedule){
   output += ( (tUntilM6A.hours == ZERO && tUntilM6A.days == ZERO ) 
     ? openNowIn.format( "MZ6 AHTK", ` in ${MIN_LEFT} min` ) + "\n" : "" );
   output += (tUntilM7.hours  == ZERO ? openNowIn.format( "MZ7",  ` in ${MIN_LEFT} min` ) + "\n" : "" );
-  output += (tUntilM6.hours  == ZERO ? openNowIn.format( "MZ6", ` in " ${MIN_LEFT} min` ) + "\n" : "" );
+  output += (tUntilM6.hours  == ZERO ? openNowIn.format( "MZ6", ` in ${MIN_LEFT} min` ) + "\n" : "" );
   
   //console.log("test print: " + output);
   
