@@ -317,7 +317,7 @@
         {"name": "Ken", "rate": "low"},{"name": "Fyuzal", "rate": "high"},{"name": "Revol", "rate": "low"},{"name": "Leon", "rate": "high"},{"name": "Ohryu", "rate": "high"},
         {"name": "Melba", "rate": "high"},{"name": "Brone", "rate": "low"},{"name": "Amizuki", "rate": "high"},{"name": "Conrandt", "rate": "low"},{"name": "Po'lar", "rate": "low"},
         {"name": "Ipp'oh", "rate": "low"},{"name": "Gantt", "rate": "low"},{"name": "Zumba", "rate": "low"},{"name": "Tomahawk", "rate": "high"},
-        {"name": "Mizzet", "rate": "special"},{"name": "Xarander", "rate": "special"},{"name": "Velick", "rate": "special"},{"name": "U'gyaro", "rate": "special"},
+        {"name": "Mizzet", "rate": "special"},{"name": "Xarander", "rate": "special"},{"name": "Velick", "rate": "special"},{"name": "U'gyaro", "rate": "special"}
       ]
   },
   "Z": {
