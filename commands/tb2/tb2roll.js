@@ -46,10 +46,8 @@ module.exports = class TB2PactSimCommand extends Command {
                   prompt: `Which pact did you want to pull?
 \`\`\`
 Available Pacts:
-Pact of Replicated Genes(PoRG)
-Pact of Replicated Elements(PoRE)
-Pact of Bountiful Elements (PoBE)
-Pact of Enigmatic Genes (PoEG)
+Pact of Captivating Genes (PoCG)
+Pact of Elements (Bulwark) (PoEB)
 Pact of Elements (PoE)
 Pact of Genes (PoG)
 Pact of Elements (Ticket/Z) (PoEZ)
@@ -149,7 +147,7 @@ Pact of Resolve (Ticket) (PoR, PoResolve)
       //Set up the return embed
       var ROLL_EMBED = new RichEmbed()
             .setTitle("Terra Battle 2 Pact Simulation")
-            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}`)
+            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}${(args.pulls==100)?' 🐋':''}`)
             .setColor([231, 231, 231])
             .setFooter("NOTE: These pulls are not binding or guaranteed!", "https://cdn.discordapp.com/attachments/360906433438547978/399453584858677258/Jodie.jpg")
             .setThumbnail("https://d1u5p3l4wpay3k.cloudfront.net/terrabattle2_gamepedia_en/b/b7/Item_Normal_Energy.png")

@@ -4,7 +4,7 @@
 
 "live": [
   "Pact of Resolve (Ticket)", "Pact of Elements", "Pact of Genes", "Pact of Elements (Ticket/Z)", "Pact of Genes (Ticket/Z)",
-  "Pact of Bountiful Elements", "Pact of Enigmatic Genes", "Pact of Replicated Elements", "Pact of Replicated Genes"
+  "Pact of Elements (Bulwark)", "Pact of Captivating Genes"
 ],
 
 "Pact of Resolve (Ticket)": {
@@ -12,12 +12,13 @@
   "alias": ["PoR", "PoResolve"],
   "rates": {"S": 94, "SS": 5, "Z": 1},
   "S": {
-    "rates" : {"high": 5.530, "low": 5.520, "special": 0},
+    "rates" : {"high": 4.480, "low": 4.470, "special": 0},
     "items": [
-        {"name": "Uhuse", "rate": "high"},{"name": "Bulk", "rate": "high"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "high"},{"name": "Ji'row", "rate": "high"},
-        {"name": "Eliz'beth", "rate": "high"},{"name": "Shen", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "high"},{"name": "Enaveldt", "rate": "high"},
-        {"name": "Shean", "rate": "high"},{"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "high"},{"name": "Shalu'lulu", "rate": "high"},
-        {"name": "Louisharant", "rate": "low"},{"name": "Pal'pal", "rate": "high"}
+        {"name": "Uhuse", "rate": "high"},{"name": "Bulk", "rate": "high"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
+        {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Met.r0n", "rate": "high"},{"name": "Sueet.r0n", "rate": "high"},{"name": "Gyut.r0n", "rate": "high"},
+        {"name": "Valut.r0n", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "high"},{"name": "Shean", "rate": "high"},
+        {"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},{"name": "Louisharant", "rate": "low"},
+        {"name": "Pal'pal", "rate": "low"}
       ]
   },
   "SS": {
@@ -106,12 +107,13 @@
     ]
   },
   "S": {
-    "rates" : {"high": 0.590, "low": 0.580, "special": 0},
+    "rates" : {"high": 0.480, "low": 0.470, "special": 0},
     "items": [
       {"name": "Uhuse", "rate": "high"},{"name": "Bulk", "rate": "high"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
-      {"name": "Eliz'beth", "rate": "high"},{"name": "Shen", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "high"},{"name": "Enaveldt", "rate": "high"},
-      {"name": "Shean", "rate": "high"},{"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "high"},{"name": "Shalu'lulu", "rate": "high"},
-      {"name": "Louisharant", "rate": "low"},{"name": "Pal'pal", "rate": "low"}
+      {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Met.r0n", "rate": "high"},{"name": "Sueet.r0n", "rate": "high"},{"name": "Gyut.r0n", "rate": "high"},
+      {"name": "Valut.r0n", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "high"},{"name": "Shean", "rate": "high"},
+      {"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},{"name": "Louisharant", "rate": "low"},
+      {"name": "Pal'pal", "rate": "low"}
     ]
   },
   "SS": {
@@ -158,95 +160,10 @@
   }
 },
 
-"Pact of Enigmatic Genes": {
-  "title": "Pact of Enigmatic Genes",
-  "alias": ["PoEG"],
-  "rates": {"A": 44.500, "S": 40.000, "SS": 12.000, "Z": 3.500},
-  "A": {
-    "rates": {"high": 2.030, "low": 2.020, "special": 0},
-    "items": [
-        {"name": "Coyik", "rate": "high"},{"name": "Johnny", "rate": "high"},{"name": "Gun'ford", "rate": "high"},{"name": "Bur'nard", "rate": "low"},{"name": "Jeanne", "rate": "low"},
-        {"name": "Ehzu", "rate": "high"},{"name": "Dorys", "rate": "low"},{"name": "Battle-R", "rate": "low"},{"name": "Surge-L", "rate": "high"},{"name": "Mukumba", "rate": "low"},
-        {"name": "Billie", "rate": "low"},{"name": "Goku", "rate": "low"},{"name": "Cid", "rate": "low"},{"name": "Joogo", "rate": "low"},{"name": "Turttra", "rate": "low"},
-        {"name": "Kwantas", "rate": "low"},{"name": "Vohgless", "rate": "low"},{"name": "Bibi'lamia", "rate": "low"},{"name": "Oppul", "rate": "high"},{"name": "Juzeiana", "rate": "low"},
-        {"name": "Macrant", "rate": "low"},{"name": "Uz", "rate": "high"}
-      ]
-  },
-  "S": {
-    "rates": {"high": 1.180, "low": 1.170, "special": 5.000},
-    "items": [
-        {"name": "Uhuse", "rate": "high"},{"name": "Bulk", "rate": "high"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
-        {"name": "Eliz'beth", "rate": "high"},{"name": "Shen", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "high"},
-        {"name": "Shean", "rate": "high"},{"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},
-        {"name": "Louisharant", "rate": "low"},{"name": "Pal'pal", "rate": "low"},
-        {"name": "Met.r0n", "rate": "special"},{"name": "Sueet.r0n", "rate": "special"},{"name": "Gyut.r0n", "rate": "special"},{"name": "Valut.r0n", "rate": "special"}
-      ]
-  },
-  "SS": {
-    "rates": {"high": 0.640, "low": 0.630, "special": 0},
-    "items": [
-        {"name": "Haruhikari", "rate": "low"},{"name": "Roland", "rate": "low"},{"name": "Kenton", "rate": "low"},{"name": "Koh", "rate": "low"},{"name": "R'un", "rate": "low"},
-        {"name": "Ken", "rate": "low"},{"name": "Fyuzal", "rate": "low"},{"name": "Revol", "rate": "low"},{"name": "Leon", "rate": "high"},{"name": "Ohryu", "rate": "high"},
-        {"name": "Melba", "rate": "low"},{"name": "Brone", "rate": "low"},{"name": "Amizuki", "rate": "low"},{"name": "Conrandt", "rate": "low"},{"name": "Po'lar", "rate": "low"},
-        {"name": "Ipp'oh", "rate": "low"},{"name": "Gantt", "rate": "low"},{"name": "Zumba", "rate": "low"},{"name": "Tomahawk", "rate": "high"}
-      ]
-  },
-  "Z": {
-    "rates": {"high": 0.350, "low": 0, "special": 0},
-    "items": [
-        {"name": "Djagos", "rate": "high"},{"name": "Tsutsura", "rate": "high"},{"name": "Chirol", "rate": "high"},{"name": "Elga", "rate": "high"},{"name": "Xena", "rate": "high"},
-        {"name": "Jodie", "rate": "high"},{"name": "Chelsea", "rate": "high"},{"name": "Shannen", "rate": "high"},{"name": "Tiffana", "rate": "high"},{"name": "Ayana", "rate": "high"}
-      ]
-  }
-},
-
-"Pact of Bountiful Elements": {
-  "title": "Pact of Bountiful Elements",
-  "alias": ["PoBE"],
-  "rates": {"A": 44.500, "S": 40, "SS": 12, "Z": 3.500},
-  "A": {
-    "rates": {"high": 2.970, "low": 2.960, "special": 0},
-    "items": [
-        {"name": "Trident", "rate": "high"},{"name": "Kappa", "rate": "high"},{"name": "Sun Blade", "rate": "low"},{"name": "Iwa-toshi", "rate": "high"},{"name": "Usu-midori", "rate": "high"},
-        {"name": "Orichalcum Spear", "rate": "high"},{"name": "Orichalcum Bow", "rate": "high"},{"name": "Diamond Bow", "rate": "low"},{"name": "Orichalcum Knife", "rate": "high"},{"name": "Orichalcum Rod", "rate": "high"},
-        {"name": "Wizard's Staff", "rate": "high"},{"name": "Enhancer", "rate": "low"},{"name": "Violet Staff", "rate": "low"},{"name": "Sun Rod", "rate": "low"},{"name": "Sun Dagger", "rate": "high"}
-      ]
-  },
-  "S": {
-    "rates": {"high": 2.110, "low": 2.100, "special": 0},
-    "items": [
-        {"name": "Rune Blade", "rate": "high"},{"name": "Kiku-ichimonji", "rate": "high"},{"name": "Sun Lance", "rate": "high"},{"name": "Sun Bow", "rate": "high"},{"name": "Crimson Staff", "rate": "high"},
-        {"name": "Hanzo's Dagger", "rate": "high"},{"name": "Diamond Shield", "rate": "low"},{"name": "Orichalcum Mail", "rate": "low"},{"name": "Diamond Armor", "rate": "low"},{"name": "Black Robe", "rate": "low"},
-        {"name": "White Robe", "rate": "low"},{"name": "Orichalcum Helm", "rate": "low"},{"name": "Diamond Helm", "rate": "low"},{"name": "Mythril Tiara", "rate": "low"},{"name": "Magician's Hat", "rate": "low"},
-        {"name": "Gravity Shield", "rate": "high"},
-        {"name": "Knight's Shield", "rate": "high"},{"name": "Knight's Plate", "rate": "high"},{"name": "Wizard's Robe", "rate": "high"}
-      ]
-  },
-  "SS": {
-    "rates": {"high": 0.500, "low": 0, "special": 0},
-    "items": [
-        {"name": "Dainsleif", "rate": "high"},{"name": "Tyrfing", "rate": "high"},{"name": "Murakumo", "rate": "high"},{"name": "Shishi-oh", "rate": "high"},{"name": "Onikiri", "rate": "high"},
-        {"name": "Trishula", "rate": "high"},{"name": "Vajrayana", "rate": "high"},{"name": "Tristan", "rate": "high"},{"name": "Thousand Bowgun", "rate": "high"},{"name": "Azoth", "rate": "high"},
-        {"name": "Sage's Staff", "rate": "high"},{"name": "Gladius", "rate": "high"},{"name": "Dragonblade", "rate": "high"},{"name": "Ochain", "rate": "high"},{"name": "Svalinn", "rate": "high"},
-        {"name": "Galahad", "rate": "high"},{"name": "Orichalcum Shield", "rate": "high"},{"name": "Golem Shield", "rate": "high"},{"name": "Luminous Robe", "rate": "high"},{"name": "Aegis Armor", "rate": "high"},
-        {"name": "Golem Armor", "rate": "high"},{"name": "Sage's Robe", "rate": "high"},{"name": "Circlet", "rate": "high"},{"name": "Mirage Helm", "rate": "high"}
-      ]
-  },
-  "Z": {
-    "rates": {"high": 0.300, "low": 0.290, "special": 0},
-    "items": [
-        {"name": "Caladbolg", "rate": "low"},{"name": "Muramasa", "rate": "low"},{"name": "Gungnir", "rate": "low"},{"name": "Yoichi Bow", "rate": "low"},{"name": "Carnwennan", "rate": "high"},
-        {"name": "Keraunos", "rate": "high"},{"name": "Omega Carapace", "rate": "low"},{"name": "Achilles Armor", "rate": "low"},{"name": "Bahamut Threads", "rate": "low"},{"name": "Leviathan Threads", "rate": "low"},
-        {"name": "Omega Helm", "rate": "low"},{"name": "Leviathan Hat", "rate": "low"}
-      ]
-  }
-
-},
-
-"Pact of Replicated Elements": {
-  "title": "Pact of Replicated Elements",
-  "alias": ["PoRE"],
-  "rates": {"A": 50, "S": 37, "SS": 10, "Z": 3},
+"Pact of Elements (Bulwark)": {
+  "title": "Pact of Elements (Bulwark)",
+  "alias": ["PoEB"],
+  "rates": {"A": 50.000, "S": 37, "SS": 10, "Z": 3.000},
   "A": {
     "rates": {"high": 3.340, "low": 3.330, "special": 0},
     "items": [
@@ -256,74 +173,70 @@
       ]
   },
   "S": {
-    "rates": {"high": 0.530, "low": 0.520, "special": 3.370},
+    "rates": {"high": 1.950, "low": 1.940, "special": 0},
     "items": [
         {"name": "Rune Blade", "rate": "high"},{"name": "Kiku-ichimonji", "rate": "high"},{"name": "Sun Lance", "rate": "high"},{"name": "Sun Bow", "rate": "high"},{"name": "Crimson Staff", "rate": "high"},
-        {"name": "Hanzo's Dagger", "rate": "high"},{"name": "Diamond Shield", "rate": "high"},{"name": "Knight's Shield", "rate": "high"},{"name": "Orichalcum Mail", "rate": "high"},{"name": "Diamond Armor", "rate": "high"},
-        {"name": "Knight's Plate", "rate": "high"},{"name": "Black Robe", "rate": "high"},{"name": "White Robe", "rate": "high"},{"name": "Wizard's Robe", "rate": "high"},{"name": "Orichalcum Helm", "rate": "high"},
-        {"name": "Diamond Helm", "rate": "low"},{"name": "Mythril Tiara", "rate": "low"},{"name": "Magician's Hat", "rate": "low"},{"name": "Gravity Shield", "rate": "high"},
-        {"name": "Mutou", "rate": "special"},{"name": "Ryushi-tou", "rate": "special"},{"name": "Mist Edge", "rate": "special"},
-        {"name": "Nanomic Blade", "rate": "special"},{"name": "Celestial Staff", "rate": "special"},{"name": "Abyssal Staff", "rate": "special"},
-        {"name": "Mist Spear", "rate": "special"},{"name": "Particle Spear", "rate": "special"}
+        {"name": "Hanzo's Dagger", "rate": "high"},{"name": "Diamond Shield", "rate": "high"},{"name": "Orichalcum Mail", "rate": "high"},{"name": "Diamond Armor", "rate": "high"},{"name": "Black Robe", "rate": "high"},
+        {"name": "White Robe", "rate": "low"},{"name": "Orichalcum Helm", "rate": "low"},{"name": "Diamond Helm", "rate": "low"},{"name": "Mythril Tiara", "rate": "low"},{"name": "Magician's Hat", "rate": "low"},
+        {"name": "Gravity Shield", "rate": "high"},
+        {"name": "Knight's Shield", "rate": "high"},{"name": "Knight's Plate", "rate": "high"},{"name": "Wizard's Robe", "rate": "high"}
       ]
   },
   "SS": {
-    "rates": {"high": 0.420, "low": 0.410, "special": 0},
+    "rates": {"high": 0.910, "low": 0.900, "special": 0},
     "items": [
-        {"name": "Dainsleif", "rate": "high"},{"name": "Tyrfing", "rate": "high"},{"name": "Murakumo", "rate": "high"},{"name": "Shishi-oh", "rate": "high"},{"name": "Onikiri", "rate": "high"},
-        {"name": "Trishula", "rate": "high"},{"name": "Vajrayana", "rate": "high"},{"name": "Tristan", "rate": "high"},{"name": "Thousand Bowgun", "rate": "high"},{"name": "Azoth", "rate": "high"},
-        {"name": "Sage's Staff", "rate": "high"},{"name": "Gladius", "rate": "high"},{"name": "Dragonblade", "rate": "high"},{"name": "Ochain", "rate": "high"},{"name": "Svalinn", "rate": "high"},
-        {"name": "Galahad", "rate": "high"},{"name": "Orichalcum Shield", "rate": "low"},{"name": "Golem Shield", "rate": "low"},{"name": "Luminous Robe", "rate": "low"},{"name": "Aegis Armor", "rate": "low"},
-        {"name": "Golem Armor", "rate": "low"},{"name": "Sage's Robe", "rate": "low"},{"name": "Circlet", "rate": "low"},{"name": "Mirage Helm", "rate": "low"}
+        {"name": "Ochain", "rate": "high"},{"name": "Svalinn", "rate": "high"},{"name": "Galahad", "rate": "high"},{"name": "Orichalcum Shield", "rate": "high"},{"name": "Golem Shield", "rate": "high"},
+        {"name": "Luminous Robe", "rate": "high"},{"name": "Aegis Armor", "rate": "high"},{"name": "Golem Armor", "rate": "high"},{"name": "Sage's Robe", "rate": "high"},{"name": "Circlet", "rate": "low"},
+        {"name": "Mirage Helm", "rate": "high"}
       ]
   },
   "Z": {
-    "rates": {"high": 0, "low": 0, "special": 0.750},
+    "rates": {"high": 0.500, "low": 0.000, "special": 0},
     "items": [
-        {"name": "Tokage-maru", "rate": "special"},{"name": "Taia", "rate": "special"},{"name": "Thyrsos", "rate": "special"},{"name": "Gae Dearg", "rate": "special"}
+        {"name": "Omega Carapace", "rate": "high"},{"name": "Achilles Armor", "rate": "high"},{"name": "Bahamut Threads", "rate": "high"},{"name": "Leviathan Threads", "rate": "high"},
+        {"name": "Omega Helm", "rate": "high"},{"name": "Leviathan Hat", "rate": "high"}
       ]
   }
 
 },
 
-"Pact of Replicated Genes": {
-  "title": "Pact of Replicated Genes",
-  "alias": ["PoRG"],
-  "rates": {"A": 50.000, "S": 37.000, "SS": 10.000, "Z": 3},
+"Pact of Captivating Genes": {
+  "title": "Pact of Captivating Genes",
+  "alias": ["PoCG"],
+  "rates": {"A": 45.500, "S": 40.000, "SS": 10.000, "Z": 4.5},
   "A": {
-    "rates": {"high": 2.280, "low": 2.270, "special": 0},
+    "rates": {"high": 2.070, "low": 2.060, "special": 0},
     "items": [
-        {"name": "Coyik", "rate": "high"},{"name": "Johnny", "rate": "low"},{"name": "Gun'ford", "rate": "high"},{"name": "Bur'nard", "rate": "low"},{"name": "Jeanne", "rate": "low"},
-        {"name": "Ehzu", "rate": "high"},{"name": "Dorys", "rate": "low"},{"name": "Battle-R", "rate": "low"},{"name": "Surge-L", "rate": "high"},{"name": "Mukumba", "rate": "low"},
-        {"name": "Billie", "rate": "low"},{"name": "Goku", "rate": "low"},{"name": "Cid", "rate": "low"},{"name": "Joogo", "rate": "low"},{"name": "Turttra", "rate": "low"},
-        {"name": "Kwantas", "rate": "low"},{"name": "Vohgless", "rate": "low"},{"name": "Bibi'lamia", "rate": "low"},{"name": "Oppul", "rate": "high"},{"name": "Juzeiana", "rate": "low"},
-        {"name": "Macrant", "rate": "low"},{"name": "Uz", "rate": "high"}
+        {"name": "Coyik", "rate": "high"},{"name": "Johnny", "rate": "high"},{"name": "Gun'ford", "rate": "high"},{"name": "Bur'nard", "rate": "high"},{"name": "Jeanne", "rate": "high"},
+        {"name": "Ehzu", "rate": "high"},{"name": "Dorys", "rate": "low"},{"name": "Battle-R", "rate": "high"},{"name": "Surge-L", "rate": "high"},{"name": "Mukumba", "rate": "low"},
+        {"name": "Billie", "rate": "high"},{"name": "Goku", "rate": "high"},{"name": "Cid", "rate": "high"},{"name": "Joogo", "rate": "high"},{"name": "Turttra", "rate": "low"},
+        {"name": "Kwantas", "rate": "high"},{"name": "Vohgless", "rate": "high"},{"name": "Bibi'lamia", "rate": "low"},{"name": "Oppul", "rate": "high"},{"name": "Juzeiana", "rate": "high"},
+        {"name": "Macrant", "rate": "high"},{"name": "Uz", "rate": "high"}
       ]
   },
   "S": {
-    "rates": {"high": 1.890, "low": 1.880, "special": 5.000},
+    "rates": {"high": 1.910, "low": 1.900, "special": 0},
     "items": [
-        {"name": "Uhuse", "rate": "low"},{"name": "Bulk", "rate": "low"},{"name": "Chacha", "rate": "low"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
-        {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Zomberger", "rate": "low"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "high"},
-        {"name": "Shean", "rate": "high"},{"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},
-        {"name": "Louisharant", "rate": "low"},{"name": "Pal'pal", "rate": "low"},
-        {"name": "Ivan", "rate": "special"}
+        {"name": "Uhuse", "rate": "low"},{"name": "Bulk", "rate": "low"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
+        {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Met.r0n", "rate": "high"},{"name": "Sueet.r0n", "rate": "high"},{"name": "Gyut.r0n", "rate": "high"},
+        {"name": "Valut.r0n", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "low"},{"name": "Shean", "rate": "high"},
+        {"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},{"name": "Louisharant", "rate": "low"},
+        {"name": "Pal'pal", "rate": "low"}
       ]
   },
   "SS": {
-    "rates": {"high": 0.270, "low": 0.260, "special": 1.250},
+    "rates": {"high": 0.530, "low": 0.520, "special": 0},
     "items": [
-        {"name": "Haruhikari", "rate": "low"},{"name": "Roland", "rate": "low"},{"name": "Kenton", "rate": "low"},{"name": "Koh", "rate": "low"},{"name": "R'un", "rate": "low"},
-        {"name": "Ken", "rate": "low"},{"name": "Fyuzal", "rate": "high"},{"name": "Revol", "rate": "low"},{"name": "Leon", "rate": "high"},{"name": "Ohryu", "rate": "high"},
-        {"name": "Melba", "rate": "high"},{"name": "Brone", "rate": "low"},{"name": "Amizuki", "rate": "high"},{"name": "Conrandt", "rate": "low"},{"name": "Po'lar", "rate": "low"},
-        {"name": "Ipp'oh", "rate": "low"},{"name": "Gantt", "rate": "low"},{"name": "Zumba", "rate": "low"},{"name": "Tomahawk", "rate": "high"},
-        {"name": "Mizzet", "rate": "special"},{"name": "Xarander", "rate": "special"},{"name": "Velick", "rate": "special"},{"name": "U'gyaro", "rate": "special"}
+        {"name": "Haruhikari", "rate": "high"},{"name": "Roland", "rate": "low"},{"name": "Kenton", "rate": "high"},{"name": "Koh", "rate": "high"},{"name": "R'un", "rate": "low"},
+        {"name": "Ken", "rate": "high"},{"name": "Fyuzal", "rate": "high"},{"name": "Revol", "rate": "low"},{"name": "Leon", "rate": "high"},{"name": "Ohryu", "rate": "high"},
+        {"name": "Melba", "rate": "high"},{"name": "Brone", "rate": "high"},{"name": "Amizuki", "rate": "high"},{"name": "Conrandt", "rate": "high"},{"name": "Po'lar", "rate": "low"},
+        {"name": "Ipp'oh", "rate": "low"},{"name": "Gantt", "rate": "low"},{"name": "Zumba", "rate": "low"},{"name": "Tomahawk", "rate": "low"}
       ]
   },
   "Z": {
     "rates": {"high": 0.000, "low": 0, "special": 1.500},
     "items": [
-        {"name": "Mu", "rate": "special"},{"name": "Mizury", "rate": "special"}
+        {"name": "Mag Amath", "rate": "special"},{"name": "Meg Amath", "rate": "special"},{"name": "Mog Amath", "rate": "special"}
       ]
   }
 }

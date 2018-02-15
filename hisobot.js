@@ -247,14 +247,14 @@ client.on('message', message => {
 client.on('error', error => {
   console.log('WebSocket error @ ' + new Date());
   console.log(error);
-  const x = await client.destroy()
+  const x = client.destroy()
     .then( function(){client.login( SETUP.token )} );
 });
 
 client.on('disconnect', event => {
   console.log('Disconnect code: ' + event.code);
   console.log('reason: ' + event.reason);
-  const x = await client.destroy()
+  const x = client.destroy()
     .then( function(){client.login( SETUP.token )} );
 });
 

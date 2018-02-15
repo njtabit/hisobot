@@ -57,11 +57,11 @@ module.exports = class RoleCommand extends Command {
     //Former role management code
     manageRoles(msg, roleNames) {
       try {
-        const guild = this.client.guilds.find("name", "Terra Battle");
+        const guild = this.client.guilds.find("name", "Terra Battle"); //231689935910993920
 
         const openRoles = tbRoles.openRoles, voidRoles = tbRoles.voidRoles;
         const guildRoles = guild.roles;
-        var guildMember = guild.fetchMember(msg.author);
+        var guildMember = guild.member(msg.author);
         
         var feedback = "";
         

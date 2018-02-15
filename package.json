@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
-    "discord.js": "^11.2.1",
+    "discord.js": "^11.3.0",
     "discord.js-commando": "github:gawdl3y/discord.js-commando#11.2",
     "mongodb": "^2.2.34",
     "request": "^2.81.0",

@@ -159,7 +159,7 @@ AT, VH, DoSA (<- for easiest, fastest, probably most accurate results)`,
       //Set up the return embed
       var ROLL_EMBED = new RichEmbed()
             .setTitle("Terra Battle Pact Simulation")
-            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}`)
+            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}${(args.pulls==100)?' 🐋':''}`)
             .setColor([212, 238, 232])
             .setFooter("NOTE: These pulls are not binding or guaranteed!", "https://cdn.discordapp.com/attachments/360906433438547978/399164651264409602/Terra_Battle_FFVIII.jpg")
             .setThumbnail("https://vignette.wikia.nocookie.net/terrabattle/images/a/a9/Energy.png/revision/latest?cb=20150430085812")
