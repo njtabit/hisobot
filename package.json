@@ -24,6 +24,7 @@
     "zerorpc": "^0.9.7"
   },
   "devDependencies": {
-    "mocha": "^4.0.0"
+    "mocha": "^4.0.0",
+    "pm2": "^2.10.1"
   }
 }

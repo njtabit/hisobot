@@ -1,6 +1,6 @@
 /*
  * Created:				  01 Feb 2018
- * Last updated:		02 Feb 2018
+ * Last updated:		27 Feb 2018
  * Developer(s):		CodedLotus
  * Description:			TB1 Pact Simulation command
  * Version #:			  1.0.0
@@ -46,8 +46,8 @@ module.exports = class TB2PactSimCommand extends Command {
                   prompt: `Which pact did you want to pull?
 \`\`\`
 Available Pacts:
-Pact of Captivating Genes (PoCG)
-Pact of Elements (Bulwark) (PoEB)
+Pact of Anomalous Genes+ (PoAG+)
+Pact of Illusive Elements+ (PoIE+)
 Pact of Elements (PoE)
 Pact of Genes (PoG)
 Pact of Elements (Ticket/Z) (PoEZ)
