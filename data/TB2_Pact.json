@@ -4,7 +4,7 @@
 
 "live": [
   "Pact of Resolve (Ticket)", "Pact of Elements", "Pact of Genes", "Pact of Elements (Ticket/Z)", "Pact of Genes (Ticket/Z)",
-  "Pact of Illusive Elements+", "Pact of Anomalous Genes+"
+  "Pact of Luscious Genes"
 ],
 
 "Pact of Resolve (Ticket)": {
@@ -31,10 +31,11 @@
       ]
   },
   "Z": {
-    "rates" : {"high": 0.100, "low": 0, "special": 0},
+    "rates" : {"high": 0.100, "low": 0.090, "special": 0},
     "items": [
-        {"name": "Djagos", "rate": "high"},{"name": "Tsutsura", "rate": "high"},{"name": "Chirol", "rate": "high"},{"name": "Elga", "rate": "high"},{"name": "Xena", "rate": "high"},
-        {"name": "Jodie", "rate": "high"},{"name": "Chelsea", "rate": "high"},{"name": "Shannen", "rate": "high"},{"name": "Tiffana", "rate": "high"},{"name": "Ayana", "rate": "high"}
+        {"name": "Djagos", "rate": "low"},{"name": "Tsutsura", "rate": "low"},{"name": "Chirol", "rate": "low"},{"name": "Elga", "rate": "low"},{"name": "Xena", "rate": "low"},
+        {"name": "Jodie", "rate": "low"},{"name": "Chelsea", "rate": "low"},{"name": "Shannen", "rate": "low"},{"name": "Tiffana", "rate": "low"},{"name": "Ayana", "rate": "low"},
+        {"name": "Mym", "rate": "high"}
       ]
   }
 },
@@ -126,10 +127,11 @@
       ]
   },
   "Z": {
-    "rates" : {"high": 0.100, "low": 0, "special": 0},
+    "rates" : {"high": 0.100, "low": 0.090, "special": 0},
     "items": [
-       {"name": "Djagos", "rate": "high"},{"name": "Tsutsura", "rate": "high"},{"name": "Chirol", "rate": "high"},{"name": "Elga", "rate": "high"},{"name": "Xena", "rate": "high"},
-       {"name": "Jodie", "rate": "high"},{"name": "Chelsea", "rate": "high"},{"name": "Shannen", "rate": "high"},{"name": "Tiffana", "rate": "high"},{"name": "Ayana", "rate": "high"}
+       {"name": "Djagos", "rate": "low"},{"name": "Tsutsura", "rate": "low"},{"name": "Chirol", "rate": "low"},{"name": "Elga", "rate": "low"},{"name": "Xena", "rate": "low"},
+       {"name": "Jodie", "rate": "low"},{"name": "Chelsea", "rate": "low"},{"name": "Shannen", "rate": "low"},{"name": "Tiffana", "rate": "low"},{"name": "Ayana", "rate": "low"},
+       {"name": "Mym", "rate": "high"}
      ]
   }
 },
@@ -160,75 +162,32 @@
   }
 },
 
-"Pact of Illusive Elements+": {
-  "title": "Pact of Illusive Elements+",
-  "alias": ["PoIE+"],
-  "rates": {"A": 50.000, "S": 37, "SS": 10, "Z": 3.000},
+"Pact of Luscious Genes": {
+  "title": "Pact of Luscious Genes",
+  "alias": ["PoLG"],
+  "rates": {"A": 45.500, "S": 40, "SS": 10, "Z": 4.5},
   "A": {
-    "rates": {"high": 3.340, "low": 3.330, "special": 0},
+    "rates" : {"high": 2.070, "low": 2.060, "special": 0},
     "items": [
-        {"name": "Trident", "rate": "low"},{"name": "Kappa", "rate": "high"},{"name": "Sun Blade", "rate": "low"},{"name": "Iwa-toshi", "rate": "low"},{"name": "Usu-midori", "rate": "low"},
-        {"name": "Orichalcum Spear", "rate": "low"},{"name": "Orichalcum Bow", "rate": "low"},{"name": "Diamond Bow", "rate": "low"},{"name": "Orichalcum Knife", "rate": "high"},{"name": "Orichalcum Rod", "rate": "high"},
-        {"name": "Wizard's Staff", "rate": "high"},{"name": "Enhancer", "rate": "low"},{"name": "Violet Staff", "rate": "low"},{"name": "Sun Rod", "rate": "low"},{"name": "Sun Dagger", "rate": "high"}
-      ]
+      {"name": "Coyik", "rate": "high"},{"name": "Johnny", "rate": "high"},{"name": "Gun'ford", "rate": "high"},{"name": "Bur'nard", "rate": "high"},{"name": "Jeanne", "rate": "high"},
+      {"name": "Ehzu", "rate": "high"},{"name": "Dorys", "rate": "low"},{"name": "Battle-R", "rate": "high"},{"name": "Surge-L", "rate": "high"},{"name": "Mukumba", "rate": "low"},
+      {"name": "Billie", "rate": "high"},{"name": "Goku", "rate": "high"},{"name": "Cid", "rate": "high"},{"name": "Joogo", "rate": "high"},{"name": "Turttra", "rate": "low"},
+      {"name": "Kwantas", "rate": "high"},{"name": "Vohgless", "rate": "high"},{"name": "Bibi'lamia", "rate": "low"},{"name": "Oppul", "rate": "high"},{"name": "Juzeiana", "rate": "high"},
+      {"name": "Macrant", "rate": "high"},{"name": "Uz", "rate": "high"}
+    ]
   },
   "S": {
-    "rates": {"high": 1.950, "low": 1.940, "special": 0},
+    "rates" : {"high": 1.910, "low": 1.900, "special": 0},
     "items": [
-        {"name": "Rune Blade", "rate": "high"},{"name": "Kiku-ichimonji", "rate": "high"},{"name": "Sun Lance", "rate": "high"},{"name": "Sun Bow", "rate": "high"},{"name": "Crimson Staff", "rate": "high"},
-        {"name": "Hanzo's Dagger", "rate": "high"},{"name": "Diamond Shield", "rate": "high"},{"name": "Orichalcum Mail", "rate": "high"},{"name": "Diamond Armor", "rate": "high"},{"name": "Black Robe", "rate": "high"},
-        {"name": "White Robe", "rate": "low"},{"name": "Orichalcum Helm", "rate": "low"},{"name": "Diamond Helm", "rate": "low"},{"name": "Mythril Tiara", "rate": "low"},{"name": "Magician's Hat", "rate": "low"},
-        {"name": "Gravity Shield", "rate": "high"},
-        {"name": "Knight's Shield", "rate": "high"},{"name": "Knight's Plate", "rate": "high"},{"name": "Wizard's Robe", "rate": "high"}
-      ]
+      {"name": "Uhuse", "rate": "low"},{"name": "Bulk", "rate": "low"},{"name": "Chacha", "rate": "high"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "high"},
+      {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Met.r0n", "rate": "high"},{"name": "Sueet.r0n", "rate": "high"},{"name": "Gyut.r0n", "rate": "high"},
+      {"name": "Valut.r0n", "rate": "high"},{"name": "Zomberger", "rate": "high"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "low"},{"name": "Shean", "rate": "high"},
+      {"name": "Ahryu", "rate": "high"},{"name": "Unryu", "rate": "high"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},{"name": "Louisharant", "rate": "low"},
+      {"name": "Pal'pal", "rate": "low"}
+    ]
   },
   "SS": {
-    "rates": {"high": 0.420, "low": 0.410, "special": 0},
-    "items": [
-        {"name": "Dainsleif", "rate": "high"},{"name": "Tyrfing", "rate": "high"},{"name": "Murakumo", "rate": "high"},{"name": "Shishi-oh", "rate": "high"},{"name": "Onikiri", "rate": "high"},
-        {"name": "Trishula", "rate": "high"},{"name": "Vajrayana", "rate": "high"},{"name": "Tristan", "rate": "high"},{"name": "Thousand Bowgun", "rate": "high"},{"name": "Azoth", "rate": "high"},
-        {"name": "Sage's Staff", "rate": "high"},{"name": "Gladius", "rate": "high"},{"name": "Dragonblade", "rate": "high"},{"name": "Ochain", "rate": "high"},{"name": "Svalinn", "rate": "high"},
-        {"name": "Galahad", "rate": "high"},{"name": "Orichalcum Shield", "rate": "low"},{"name": "Golem Shield", "rate": "low"},{"name": "Luminous Robe", "rate": "low"},{"name": "Aegis Armor", "rate": "low"},
-        {"name": "Golem Armor", "rate": "low"},{"name": "Sage's Robe", "rate": "low"},{"name": "Circlet", "rate": "low"},{"name": "Mirage Helm", "rate": "low"}
-      ]
-  },
-  "Z": {
-    "rates": {"high": 0.130, "low": 0.120, "special": 0.500},
-    "items": [
-        {"name": "Caladbolg", "rate": "special"},{"name": "Muramasa", "rate": "special"},{"name": "Gungnir", "rate": "special"},{"name": "Yoichi Bow", "rate": "special"},{"name": "Carnwennan", "rate": "high"},
-        {"name": "Keraunos", "rate": "high"},{"name": "Omega Carapace", "rate": "high"},{"name": "Achilles Armor", "rate": "high"},{"name": "Bahamut Threads", "rate": "low"},{"name": "Leviathan Threads", "rate": "low"},
-        {"name": "Omega Helm", "rate": "low"},{"name": "Leviathan Hat", "rate": "low"}
-      ]
-  }
-
-},
-
-"Pact of Anomalous Genes+": {
-  "title": "Pact of Anomalous Genes+",
-  "alias": ["PoAG+"],
-  "rates": {"A": 50.000, "S": 37.000, "SS": 10.000, "Z": 3.0},
-  "A": {
-    "rates": {"high": 2.280, "low": 2.270, "special": 0},
-    "items": [
-        {"name": "Coyik", "rate": "high"},{"name": "Johnny", "rate": "low"},{"name": "Gun'ford", "rate": "high"},{"name": "Bur'nard", "rate": "low"},{"name": "Jeanne", "rate": "low"},
-        {"name": "Ehzu", "rate": "high"},{"name": "Dorys", "rate": "low"},{"name": "Battle-R", "rate": "low"},{"name": "Surge-L", "rate": "high"},{"name": "Mukumba", "rate": "low"},
-        {"name": "Billie", "rate": "low"},{"name": "Goku", "rate": "low"},{"name": "Cid", "rate": "low"},{"name": "Joogo", "rate": "low"},{"name": "Turttra", "rate": "low"},
-        {"name": "Kwantas", "rate": "low"},{"name": "Vohgless", "rate": "low"},{"name": "Bibi'lamia", "rate": "low"},{"name": "Oppul", "rate": "high"},{"name": "Juzeiana", "rate": "low"},
-        {"name": "Macrant", "rate": "low"},{"name": "Uz", "rate": "high"}
-      ]
-  },
-  "S": {
-    "rates": {"high": 1.770, "low": 1.760, "special": 0},
-    "items": [
-        {"name": "Uhse", "rate": "low"},{"name": "Bulk", "rate": "low"},{"name": "Chacha", "rate": "low"},{"name": "Hime'nald", "rate": "low"},{"name": "Ji'row", "rate": "low"},
-        {"name": "Eliz'beth", "rate": "low"},{"name": "Shen", "rate": "low"},{"name": "Met.r0n", "rate": "high"},{"name": "Sueet.r0n", "rate": "high"},{"name": "Gyut.r0n", "rate": "high"},
-        {"name": "Valut.r0n", "rate": "high"},{"name": "Zomberger", "rate": "low"},{"name": "Bali", "rate": "low"},{"name": "Enaveldt", "rate": "low"},{"name": "Shean", "rate": "low"},
-        {"name": "Ahryu", "rate": "low"},{"name": "Unryu", "rate": "low"},{"name": "Chizuru", "rate": "low"},{"name": "Shalu'lulu", "rate": "low"},{"name": "Louisharant", "rate": "low"},
-        {"name": "Pal'pal", "rate": "low"}
-      ]
-  },
-  "SS": {
-    "rates": {"high": 0.530, "low": 0.520, "special": 0},
+    "rates" : {"high": 0.530, "low": 0.520, "special": 0},
     "items": [
         {"name": "Haruhikari", "rate": "high"},{"name": "Roland", "rate": "low"},{"name": "Kenton", "rate": "high"},{"name": "Koh", "rate": "high"},{"name": "R'un", "rate": "low"},
         {"name": "Ken", "rate": "high"},{"name": "Fyuzal", "rate": "high"},{"name": "Revol", "rate": "low"},{"name": "Leon", "rate": "high"},{"name": "Ohryu", "rate": "high"},
@@ -237,12 +196,10 @@
       ]
   },
   "Z": {
-    "rates": {"high": 0.100, "low": 0, "special": 2.000},
+    "rates" : {"high": 4.500, "low": 0, "special": 0},
     "items": [
-        {"name": "Djagos", "rate": "high"},{"name": "Tsutsura", "rate": "high"},{"name": "Chirol", "rate": "high"},{"name": "Elga", "rate": "high"},{"name": "Xena", "rate": "high"},
-        {"name": "Jodie", "rate": "high"},{"name": "Chelsea", "rate": "high"},{"name": "Shannen", "rate": "high"},{"name": "Tiffana", "rate": "high"},{"name": "Ayana", "rate": "high"},
-        {"name": "Mym", "rate": "special"}
-      ]
+       {"name": "Godaugar", "rate": "high"}
+     ]
   }
 }
 

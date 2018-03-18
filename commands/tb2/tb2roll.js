@@ -1,6 +1,6 @@
 /*
  * Created:				  01 Feb 2018
- * Last updated:		27 Feb 2018
+ * Last updated:		14 Mar 2018
  * Developer(s):		CodedLotus
  * Description:			TB1 Pact Simulation command
  * Version #:			  1.0.0
@@ -46,8 +46,6 @@ module.exports = class TB2PactSimCommand extends Command {
                   prompt: `Which pact did you want to pull?
 \`\`\`
 Available Pacts:
-Pact of Anomalous Genes+ (PoAG+)
-Pact of Illusive Elements+ (PoIE+)
 Pact of Elements (PoE)
 Pact of Genes (PoG)
 Pact of Elements (Ticket/Z) (PoEZ)
@@ -147,7 +145,7 @@ Pact of Resolve (Ticket) (PoR, PoResolve)
       //Set up the return embed
       var ROLL_EMBED = new RichEmbed()
             .setTitle("Terra Battle 2 Pact Simulation")
-            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}${(args.pulls==100)?' 🐋':''}`)
+            .setDescription(`Here's a good guess on your next pull${(args.pulls>1)?'s':''}${(args.pulls==100)?' '+this.client.emojis.find("name", "moneywhale"):''}`)
             .setColor([231, 231, 231])
             .setFooter("NOTE: These pulls are not binding or guaranteed!", "https://cdn.discordapp.com/attachments/360906433438547978/399453584858677258/Jodie.jpg")
             .setThumbnail("https://d1u5p3l4wpay3k.cloudfront.net/terrabattle2_gamepedia_en/b/b7/Item_Normal_Energy.png")

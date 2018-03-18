@@ -33,6 +33,7 @@ module.exports = class ShutdownCommand extends Command {
 	    
 	    const author = msg.message.author;
 	    const server = msg.message.guild;
+      console.log(`Time is: ${new Date()}`);
 	    console.log("Bot shutdown on user request");
 	    console.log("user: " + author.username + " id: " + author.id);
 	    console.log("server: " + server.name + " id: " + server.id);
@@ -41,7 +42,7 @@ module.exports = class ShutdownCommand extends Command {
 	    //Discord Client Logout
 	    this.client.destroy();
 	    //Node.js process exit
-	    setTimeout(process.exit, 1*1000);
+	    setTimeout( () => { console.log("Exiting. Is it update time?"); process.exit(0); }, 1*1000);
       /*
       sendMessage(command, "Uploaded by Alpha12 of the Terra Battle Wiki");
       sendMessage(command, new Discord.Attachment("./assets/vengeful_heart.png"));

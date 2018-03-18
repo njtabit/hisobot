@@ -1,6 +1,6 @@
 /*
  * Created:				  02 Jan 2018
- * Last updated:		01 Feb 2018
+ * Last updated:		17 Mar 2018
  * Developer(s):		CodedLotus
  * Description:			Core details and functions of Hisobot
  * Version #:			  2.0.0
@@ -50,6 +50,10 @@ const DQSchedule = require("./constants/DQTable");
 /* Metal Zone and Daily Quest Alert system */
 const IntervalAlerts = require("./constants/interval.js");
 
+/* MongoDB (Mongoose) Connection Library */
+//const fs = require("fs");
+//const mongoose = require('mongoose');
+//const MONGODB_INFO = require("./auth/mongo_config");
 
 
 
@@ -57,12 +61,13 @@ const IntervalAlerts = require("./constants/interval.js");
  * https://www.sitepoint.com/making-http-requests-in-node-js/
  * Used for HTTP requests for JSON data
  */
-var request = require("request");
+//probably can be moved to the wiki searches and changed with a promise-based request
+//var request = require("request"); 
 
 /*var python = require("./python.js");
 var mongo = require("./database.js");
-var commands = require("./commands.js");*/
-//var mongoClient = require('mongodb').MongoClient;
+var commands = require("./commands.js");
+var mongoClient = require('mongodb').MongoClient;*/
 
 /*
  * Helper Functions that I will use frequently
@@ -77,6 +82,63 @@ String.prototype.format = function () {
   });
 };
 
+
+class HisoBot extends Commando.CommandoClient{
+  constructor(options) {
+    super(options);
+
+    /** Set Up MZSchedule and DQSchedule space */
+    this.MZSchedule = MZSchedule;
+    this.DQSchedule = DQSchedule;
+    
+    /*** Start of the Easter Egg messages ***/
+    this.thankYou     = [ "thank you", "thanks", "thx"],
+    this.sorry        = [ "sorry", "im sorry", "i'm sorry"],
+    this.praiseYamcha = [ "praiseyamcha", "praise yamcha"],
+    this.hisoNames    = ["hisobot", "hisoguchi"];
+    
+    /** MongoDB connection */
+    //client.mongooseDB = MONGODB_INFO;
+  }
+  
+  //Praise LordYamcha
+  PraiseYamcha(message, msgContentLower) {
+    if( this.praiseYamcha.includes( msgContentLower ) ){
+      //Because why not
+      message.channel.send("Good, I don't need the Dragon Balls pulled out of storage.");
+    }
+  }
+
+  ThanksHisobot(message, msgContentLower) {
+    if( this.thankYou.some( x => msgContentLower.startsWith(x)) ){
+      msgContentLower = ( msgContentLower.startsWith("thank you") 
+        ? msgContentLower.slice("thank you".length).trim()
+        : msgContentLower.slice("thanks".length).trim() );
+      
+      if( this.hisoNames.includes( msgContentLower ) ){
+        const goodjob = this.emojis.find("name", "goodjob"), love = this.emojis.find("name", "love");
+        message.react(goodjob); message.react(love);
+      }
+    }
+  }
+
+  SorryHisobot(message, msgContentLower){
+    if( this.sorry.some( x => msgContentLower.startsWith(x) ) ){
+      msgContentLower = ( msgContentLower.startsWith("sorry") 
+        ? msgContentLower.slice("sorry".length).trim()
+        : ( msgContentLower.startsWith("im sorry") 
+            ? msgContentLower.slice("im sorry".length).trim()
+            : msgContentLower.slice("i'm sorry".length).trim() ) );
+      
+      if( this.hisoNames.includes( msgContentLower ) ){
+        const love = this.emojis.find("name", "love");
+        message.react(love);
+      }
+    }
+  }
+  /*** End of the Easter Egg messages ***/
+  
+}
 
 /*** Start of the Easter Egg messages ***/
 const thankYou     = [ "thank you", "thanks"],
@@ -135,9 +197,10 @@ function alerts(client, MZSchedule, DQSchedule){
 
 
 /*** Commando Client: Combined Discord.js-commando + Discord.js client (by extension) ***/
-const client = new Commando.CommandoClient(SETUP.options);
-  client.MZSchedule = MZSchedule;
-  client.DQSchedule = DQSchedule;
+//const client = new Commando.CommandoClient(SETUP.options);
+const client = new HisoBot(SETUP.options);
+  //client.MZSchedule = MZSchedule;
+  //client.DQSchedule = DQSchedule;
 
 
 client.registry
@@ -172,6 +235,9 @@ client.on('ready', () => {
   nextMinute.setMilliseconds(0); nextMinute.setSeconds(0); nextMinute.setMinutes(nextMinute.getMinutes() +1);
   client.setTimeout(alerts, nextMinute-now, client, MZSchedule, DQSchedule );
   //alerts(client, MZSchedule, DQSchedule);
+  
+  //Set up the Mongoose client
+  //client.db = mongoose.connect(client.mongooseDB);
 });
 
 
@@ -205,9 +271,9 @@ client.on('message', message => {
 	 * D: Commands that start with the bot's trigger character
 	 */
 	
-  PraiseYamcha(message, msgContentLower);
-  ThanksHisobot(message, msgContentLower);
-  SorryHisobot(message,msgContentLower);
+  client.PraiseYamcha(message, msgContentLower);
+  client.ThanksHisobot(message, msgContentLower);
+  client.SorryHisobot(message,msgContentLower);
   
   
   /*
@@ -247,15 +313,15 @@ client.on('message', message => {
 client.on('error', error => {
   console.log('WebSocket error @ ' + new Date());
   console.log(error);
-  const x = client.destroy()
-    .then( function(){client.login( SETUP.token )} );
+  client.destroy();
+  setTimeout(() => { client.login( SETUP.token ); }, 5000); 
+  //client.login( SETUP.token );
 });
 
 client.on('disconnect', event => {
   console.log('Disconnect code: ' + event.code);
   console.log('reason: ' + event.reason);
-  const x = client.destroy()
-    .then( function(){client.login( SETUP.token )} );
+  client.destroy();
 });
 
 client.login( SETUP.token );
