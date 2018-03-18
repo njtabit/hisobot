@@ -46,6 +46,7 @@ module.exports = class TB2PactSimCommand extends Command {
                   prompt: `Which pact did you want to pull?
 \`\`\`
 Available Pacts:
+Pact of Luscious Genes (PoLG)
 Pact of Elements (PoE)
 Pact of Genes (PoG)
 Pact of Elements (Ticket/Z) (PoEZ)
