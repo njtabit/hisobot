@@ -25,16 +25,37 @@ module.exports = class TB2WIKI_Command extends Command {
       group: 'tb2',
       memberName: 'tb2wiki',
       description: 'Searches the Terra Battle 2 wiki for the requested information.',
-      examples: ['tb2wiki samatha union','tb2wiki xena dnaskills','tb2wiki dark_reign rewards'],
+      examples: ['tb2wiki union samatha','tb2wiki dnaskills xena','tb2wiki rewards dark reign'],
+      details: `
+      Information available for request depends on the type of page requested. Below are all accepted information values.
+      During development, an asterisk will be placed in front of implemented values.
+\`\`\`
+GUARDIANS
+  *availability
+  *union
+  baseskills
+  baseprofile
+  dnaskills
+  dnaprofile
+  rnaskills
+  rnaprofile
+
+EQUIPMENT
+  availability
+  range
+  stats
+
+COMPANIONS
+  availability
+  skill
+
+QUESTS
+  stamina
+  rewards
+  enemies
+  scenario
+\`\`\``,
       args: [
-        {
-          key: 'page',
-          prompt: 'What page are you looking for?',
-          type: 'string',
-          parse: page => {
-            return page.trim().replace(' ', '_');
-          }
-        },
         {
           key: 'info',
           prompt: 'What info are you looking for?',
@@ -42,15 +63,24 @@ module.exports = class TB2WIKI_Command extends Command {
           parse: info => {
             return info.toLowerCase().trim();
           }
+        },
+        {
+          key: 'page',
+          prompt: 'What page are you looking for?',
+          type: 'string',
+          parse: page => {
+            return page.trim().replace(' ', '_');
+          }
         }
       ]
     });
   }
 
   run(msg, args) {
+    //console.log(args);
     const TB2WIKI_Embed = new RichEmbed();
     TB2WIKI_Embed.setTitle('Terra Battle 2 Wiki Search')
-      .setDescription('Here\'s what I was able to find')
+      .setDescription('Here\'s what I was able to find:')
       .setColor([134, 206, 203])
       .setFooter('Gendreavus#8363', 'https://cdn.discordapp.com/avatars/178385474824437760/b2f95c567ab31fa00f688040b2315dcf.png')
       .setTimestamp();
@@ -80,17 +110,17 @@ module.exports = class TB2WIKI_Command extends Command {
 
     get('https://terrabattle2.gamepedia.com/api.php?action=parse&page=' + title + '&utf8=&format=json', (res) => {
 
-      console.log('Get begun');
+      //console.log('Get begun');
       const status = res.statusCode;
       if (status === 200) {
 
-        console.log('Get successful');
+        //console.log('Get successful');
         // As the data is received stream it into the rawData variable, then work with it in the 'end' callback.
         let rawData = '';
         res.on('data', (chunk) => { rawData += chunk });
         res.on('end', () => {
 
-          console.log('Get Complete');
+          //console.log('Get Complete');
           // There's always a chance that we'll get back junk json, so we'll wrap it in a try/catch loop that drops the process on an error.
           let json = '';
           try {
@@ -102,19 +132,23 @@ module.exports = class TB2WIKI_Command extends Command {
             return;
           }
 
-          // Turn the text portion of the JSON into a traversable DOM object
-          let page = new JSDOM(json.text["*"]);
-          page = page.window.document;
+          if (json != null) {
+            // Turn the text portion of the JSON into a traversable DOM object
+            let page = new JSDOM(json.text["*"]);
+            page = page.window.document;
 
-          if (page.querySelector('.noarticletext')) {
-            result['Article does not exist'] = 'Please double-check the page name\'s spelling.';
-          } else {
             result = this.__findInfo(page, json.categories, title, info);
-            console.log(result);
-          }
+            //console.log(result);
 
-          cb(result);
-          return;
+            cb(result);
+            return;
+
+          } else {
+            // 404 errors redirect to HTML pages that return a 200 (okay) status instead of failing, so we have to deal with them here.
+            result['Article for ' + title + ' does not exist'] = 'Please double-check the page name\'s spelling.';
+            cb(result);
+            return;
+          }
         });
 
       } else if (status === 301) {
@@ -155,13 +189,44 @@ module.exports = class TB2WIKI_Command extends Command {
     if (cats.includes('Guardians')) {
       switch (info) {
 
+        case 'availability':
+          result['Availability for ' + title] = '';
+          let avail = page.getElementById('Availability');
+          avail = avail.parentNode.nextElementSibling.getElementsByTagName('li');
+
+          // By grabbing each list item's child nodes, we can represent the text exactly as the wiki does at the cost of using a nested loop. If this gets too expensive down the line we can make it plain text only.
+          for (let i = 0; i < avail.length; i++) {
+
+            if (i !== 0) {
+              result['Availability for ' + title] += '\n';
+            }
+
+            for (let j = 0; j < avail[i].childNodes.length; j++) {
+
+              let option = avail[i].childNodes[j];
+              //console.log(option);
+              if (option.href) {
+                let href = option.href.replace(')', '%29');
+                result['Availability for ' + title] += '[' + option.textContent + ']( https://terrabattle2.gamepedia.com' + href + ' )';
+              } else {
+                result['Availability for ' + title] += option.textContent;
+              }
+            }
+          }
+          break;
+
         case 'union':
-          console.log('union reached');
+          //console.log('union reached');
           let rewards = page.getElementById('Union_Rewards');
           rewards = rewards.parentNode.nextElementSibling.getElementsByTagName('tr');
           rewards = [
             rewards[1].lastElementChild.lastElementChild,
             rewards[2].lastElementChild.lastElementChild
+          ];
+
+          const href = [
+            rewards[0].href.replace(')', '%29'),
+            rewards[1].href.replace(')', '%29')
           ];
 
           result['50% reward:'] = '[' + rewards[0].textContent + '](https://terrabattle2.gamepedia.com' + rewards[0].href + ')';
